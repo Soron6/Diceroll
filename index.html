@@ -1,353 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dice Roller</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        th, td {
-            text-align: center;
-            padding: 8px;
-            border: 0px solid #ddd;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-		.resultText {
-			    content: attr(data-number);
-				display: block;
-				position: absolute;
-				top: 11%;
-				left: 0;
-				right: 0;
-				font-size: 24px;
-				color: white;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-		}
-
-        #inputAndButtons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        #inputSection,
-        #buttonSection {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        #inputSubSection {
-            display: flex;
-            align-items: center;
-        }
-
-        #inputSubSection input,
-        #inputSubSection button {
-            margin-right: 5px;
-        }
-
-        #inputSectionBottom,
-        #buttonSectionBottom {
-            margin-top: 0px;
-        }
-
-        #buttonSectionBottom {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        button {
-            padding: 8px 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            color: white;
-        }
-
-        #decrementButton {
-            background-color: #f44336;
-        }
-
-        #incrementButton {
-            background-color: #4CAF50;
-        }
-
-        #toggleButton {
-            background-color: #008CBA;
-        }
-
-        #rollButton {
-            background-color: #4CAF50;
-        }
-
-        #clearButton {
-            background-color: #f44336;
-        }
-
-        #darkModeButton {
-            background-color: #555;
-        }
-
-        .dark-mode {
-            background-color: #121212;
-            color: #ffffff;
-        }
-
-        .dark-mode th {
-            background-color: #333333;
-        }
-
-        .dark-mode td {
-            border-color: #555555;
-        }
-
-        .dark-mode button {
-            color: white;
-        }
-
-        #diceAnimationContainer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 200px;
-            margin-top: 20px;
-        }
-
-        #d6Animation, #d10Animation1, #d10Animation2 {
-            width: 100px;
-            height: 100px;
-			background-position: center;
-            background-size: cover;
-            animation-duration: 1s;
-            animation-timing-function: ease-out;
-            position: relative;
-        }
-
-
-        @keyframes rollAnimation {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        #d6Animation {
-            background-image: url('d6.png');
-        }
-
-        #d10Animation1, #d10Animation2 {
-            background-image: url('d10.png');
-        }
-
-        .rollingAnimation {
-            animation-name: rollAnimation;
-            animation-iteration-count: infinite;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<table>
-    <tr>
-        <td>
-            <div id="inputAndButtons">
-                <div id="inputSection">
-                    <div id="inputSubSection">
-                        <input type="number" id="variableInput" placeholder="Variable" value="3" style="padding: 8px; border-radius: 5px; border: 1px solid #ccc; width: 40px;">
-                        <button id="decrementButton">-</button>
-                        <button id="incrementButton">+</button>
-                    </div>
-                </div>
-            </div>
-        </td>
-        <td>
+    <div id="inputAndButtons">
+        <div id="inputSection">
+            <button id="decrementButton">-</button>
+            <input type="number" id="variableInput" value="3" min="0">
+            <button id="incrementButton">+</button>
+        </div>
+        <div id="buttonSection">
             <button id="rollButton">Roll Dice</button>
-        </td>
-        <td>
-            <div id="buttonSectionBottom">
-                <button id="clearButton">Clear Content</button>
-            </div>
-        </td>
-        <td>
-            <div id="buttonSectionBottom">
-                <button id="darkModeButton">Dark Mode</button>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <div id="buttonSectionBottom">
-                <button id="toggleButton">Aktion</button>
-            </div>
-        </td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-</table>
+            <button id="clearButton">Clear Content</button>
+            <button id="darkModeButton">Dark Mode</button>
+        </div>
+        <div id="toggleAndTopicSection">
+            <button id="toggleButton">Aktion</button>
+            <input type="text" id="topicInput" placeholder="Enter topic">
+        </div>
+    </div>
 
-<div id="diceAnimationContainer">
-    <div id="d6Animation"></div>
-    <div id="d10Animation1"></div>
-    <div id="d10Animation2"></div>
-</div>
+    <div id="diceAnimationContainer">
+        <div id="d6Animation"><div class="resultText"></div></div>
+        <div id="d10Animation1"><div class="resultText"></div></div>
+        <div id="d10Animation2"><div class="resultText"></div></div>
+    </div>
 
-<div id="results"></div>
+    <div id="results"></div>
 
-<script>
-    let isAction = true;
-
-    // Funktion zum Inkrementieren der Variable
-    document.getElementById("incrementButton").addEventListener("click", function() {
-        const variableInput = document.getElementById("variableInput");
-        let variable = parseInt(variableInput.value); 
-        if (isNaN(variable)) variable = 0;
-        variableInput.value = variable + 1;
-    });
-
-    // Funktion zum Dekrementieren der Variable
-    document.getElementById("decrementButton").addEventListener("click", function() {
-        const variableInput = document.getElementById("variableInput");
-        let variable = parseInt(variableInput.value); 
-        if (isNaN(variable)) variable = 0;
-        if (variable > 0) variableInput.value = variable - 1;
-    });
-
-    // Toggle-Funktion für "Aktion" und "Herausforderung"
-    document.getElementById("toggleButton").addEventListener("click", function() {
-        isAction = !isAction;
-        document.getElementById("toggleButton").innerText = isAction ? "Aktion" : "Herausforderung";
-    });
-
-    // Funktion zum Würfeln und Anzeigen der Ergebnisse
-    async function rollDiceAndDisplayResults() {
-        const variableInput = document.getElementById("variableInput");
-        const variable = parseInt(variableInput.value); 
-
-        if (isNaN(variable)) {
-            alert("Please enter a valid number for the variable.");
-            return;
-        }
-
-        const modifier = variable;
-
-        let d6 = 0;
-        let d6Element = document.getElementById("d6Animation");
-        let d10_1Element = document.getElementById("d10Animation1");
-        let d10_2Element = document.getElementById("d10Animation2");
-
-        if (isAction) {
-			d6Element.innerHTML = `<div class="resultText"></div>`;
-            d10_1Element.innerHTML = `<div class="resultText"></div>`;
-            d10_2Element.innerHTML = `<div class="resultText"></div>`;
-			d6Element.style.visibility = "visible";
-            d6 = Math.ceil(Math.random() * 6);
-            d6Element.classList.add("rollingAnimation");
-            d6Element.setAttribute("data-number", d6);
-            d10_1Element.classList.add("rollingAnimation");
-			
-            d10_2Element.classList.add("rollingAnimation");
-			
-        } else {
-			d6Element.innerHTML = `<div class="resultText"></div>`;
-            d10_1Element.innerHTML = `<div class="resultText"></div>`;
-            d10_2Element.innerHTML = `<div class="resultText"></div>`;
-            d6Element.classList.remove("rollingAnimation");
-			d6Element.style.visibility = "hidden";
-            d10_1Element.classList.add("rollingAnimation");
-            d10_2Element.classList.add("rollingAnimation");
-        }
-
-        const d10_1 = Math.ceil(Math.random() * 10);
-        const d10_2 = Math.ceil(Math.random() * 10);
-
-        let result = d6 + modifier;
-        if (!isAction) {
-            result = modifier;
-        } else if (result > 10) {
-            result = 10;
-        }
-
-        let successType = "";
-        let epic = (d10_1 === d10_2) ? " (episch)" : "";
-
-        if (result > d10_1 && result > d10_2) {
-            successType = "Voller Erfolg";
-        } else if (result > d10_1 || result > d10_2) {
-            successType = "Teilerfolg";
-        } else {
-            successType = "Fehlschlag";
-        }
-
-        successType += epic;
-
-        const d10_1_formatted = result > d10_1 ? `<s>${d10_1}</s>` : d10_1;
-        const d10_2_formatted = result > d10_2 ? `<s>${d10_2}</s>` : d10_2;
-
-        const resultDiv = document.createElement("div");
-        resultDiv.innerHTML = `
-            <hr>
-            <h4>Wurf ${document.querySelectorAll(".result").length + 1} (${isAction ? 'Aktion' : 'Herausforderung'})</h4>
-            <p><strong>Modifier:</strong> ${modifier}</p>
-            <p><strong>Ergebnis:</strong> ${successType}</p>
-            <table>
-                <tr>
-                    <th>D6</th>
-                    <th>D10 (1)</th>
-                    <th>D10 (2)</th>
-                </tr>
-                <tr>
-                    <td>${isAction ? `<strong>${result}</strong>` : `<strong>${result}</strong>`}</td>
-                    <td>${d10_1_formatted}</td>
-                    <td>${d10_2_formatted}</td>
-                </tr>
-            </table>
-        `;
-        resultDiv.classList.add("result");
-
-        const resultsContainer = document.getElementById("results");
-        if (resultsContainer.firstChild) {
-            resultsContainer.insertBefore(resultDiv, resultsContainer.firstChild);
-        } else {
-            resultsContainer.appendChild(resultDiv);
-        }
-
-        // Animation nach 1 Sekunde beenden
-        setTimeout(() => {
-            d6Element.classList.remove("rollingAnimation");
-            d10_1Element.classList.remove("rollingAnimation");
-            d10_2Element.classList.remove("rollingAnimation");
-            // Text auf den Würfeln anzeigen
-            d6Element.innerHTML = `<div class="resultText">${d6}</div>`;
-            d10_1Element.innerHTML = `<div class="resultText">${d10_1}</div>`;
-            d10_2Element.innerHTML = `<div class="resultText">${d10_2}</div>`;
-        }, 1000);
-    }
-
-    document.getElementById("rollButton").addEventListener("click", rollDiceAndDisplayResults);
-
-    // Funktion zum Löschen der Ergebnisse
-    document.getElementById("clearButton").addEventListener("click", function() {
-        document.getElementById("results").innerHTML = "";
-    });
-
-    // Funktion zum Umschalten in den Dark-Mode
-    document.getElementById("darkModeButton").addEventListener("click", function() {
-        document.body.classList.toggle("dark-mode");
-    });
-</script>
+    <script src="script.js"></script>
 </body>
 </html>

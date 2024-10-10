@@ -1,0 +1,172 @@
+body {
+    font-family: Arial, sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+    padding: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+#inputAndButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#inputSection, #buttonSection, #toggleAndTopicSection {
+    display: flex;
+    gap: 5px;
+}
+
+#inputSection {
+    flex: 1 1 100%;
+}
+
+#buttonSection {
+    flex: 1 1 100%;
+}
+
+#toggleAndTopicSection {
+    flex: 1 1 100%;
+}
+
+input[type="number"], input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+button {
+    padding: 8px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    color: white;
+    flex: 1;
+}
+
+#decrementButton {
+    background-color: #f44336;
+}
+
+#incrementButton {
+    background-color: #4CAF50;
+}
+
+#toggleButton {
+    background-color: #008CBA;
+}
+
+#rollButton {
+    background-color: #4CAF50;
+}
+
+#clearButton {
+    background-color: #f44336;
+}
+
+#darkModeButton {
+    background-color: #555;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+#diceAnimationContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+#d6Animation, #d10Animation1, #d10Animation2 {
+    width: 80px;
+    height: 80px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+}
+
+#d6Animation {
+    background-image: url('d6.png');
+}
+
+#d10Animation1, #d10Animation2 {
+    background-image: url('d10.png');
+}
+
+.resultText {
+    position: absolute;
+    font-size: 18px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    padding-top: 3px;
+}
+
+#d6Animation .resultText {
+    padding-top: 4px;
+}
+
+#d10Animation1 .resultText, #d10Animation2 .resultText {
+    padding-top: 5px;
+}
+
+.rollingAnimation {
+    animation: rollAnimation 1s ease-out;
+}
+
+@keyframes rollAnimation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.dark-mode th, .dark-mode td {
+    border-color: #555;
+}
+
+.dark-mode input[type="number"], .dark-mode input[type="text"] {
+    background-color: #333;
+    color: #fff;
+    border-color: #555;
+}
+
+@media (max-width: 600px) {
+    #inputAndButtons {
+        flex-direction: column;
+    }
+
+    #inputSection, #buttonSection, #toggleAndTopicSection {
+        flex-wrap: wrap;
+    }
+
+    #diceAnimationContainer {
+        flex-wrap: wrap;
+    }
+
+    #d6Animation, #d10Animation1, #d10Animation2 {
+        width: 60px;
+        height: 60px;
+    }
+}
