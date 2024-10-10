@@ -106,11 +106,7 @@ function rollDiceAndDisplayResults() {
     const resultsContainer = document.getElementById("results");
     resultsContainer.insertBefore(resultDiv, resultsContainer.firstChild);
 
-    if (resultsContainer.children.length === 1) {
-        resultDiv.addEventListener('click', toggleResultsList);
-    }
-
-    updateArrowIndicator();
+    updateResultListeners();
 
     saveResultToLocalStorage({
         modifier, result, d6, d10_1, d10_2, successType, isAction, resultImage, isEpic, topic
@@ -119,6 +115,20 @@ function rollDiceAndDisplayResults() {
     topicInput.value = '';
 
     animateDice(isAction, d6, d10_1, d10_2);
+}
+
+function updateResultListeners() {
+    const resultsContainer = document.getElementById("results");
+    const resultCards = resultsContainer.querySelectorAll('.result-card');
+
+    resultCards.forEach((card, index) => {
+        card.removeEventListener('click', toggleResultsList);
+        if (index === 0) {
+            card.addEventListener('click', toggleResultsList);
+        }
+    });
+
+    updateArrowIndicator();
 }
 
 function toggleResultsList() {
@@ -203,10 +213,7 @@ function loadResultsFromLocalStorage() {
         resultsContainer.appendChild(resultDiv);
     });
 
-    if (resultsContainer.children.length > 0) {
-        resultsContainer.firstElementChild.addEventListener('click', toggleResultsList);
-        updateArrowIndicator();
-    }
+    updateResultListeners();
 }
 
 // Function to clear results from localStorage
