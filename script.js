@@ -1,5 +1,8 @@
 let isAction = true;
 
+// Create an Audio object for the roll sound
+const rollSound = new Audio('roll.mp3');
+
 // Load stored values from localStorage when the page loads
 window.onload = function() {
     console.log("Page loaded, loading results from localStorage...");
@@ -44,6 +47,10 @@ function getResultImage(successType) {
 // Roll the dice and display results
 function rollDiceAndDisplayResults() {
     console.log("Roll Dice button clicked");
+    
+    // Play the roll sound
+    rollSound.play();
+    
     const variableInput = document.getElementById("variableInput");
     const topicInput = document.getElementById("topicInput");
     const variable = parseInt(variableInput.value); 
@@ -70,18 +77,18 @@ function rollDiceAndDisplayResults() {
     const resultImage = getResultImage(successType);
 
     const resultDiv = document.createElement("div");
+    resultDiv.classList.add("result-card");
     resultDiv.innerHTML = `
-        <hr>
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h4>Wurf ${document.querySelectorAll(".result").length + 1} (${isAction ? 'Aktion' : 'Herausforderung'})</h4>
-            <div>
-                <img src="${resultImage}" alt="${successType}" style="width: 24px; height: 24px; vertical-align: middle;">
-                ${isEpic ? `<img src="episch.png" alt="Episch" style="width: 24px; height: 24px; vertical-align: middle; margin-left: 5px;">` : ''}
+            <h4>Wurf ${document.querySelectorAll(".result-card").length + 1} (${isAction ? 'Aktion' : 'Herausforderung'})</h4>
+            <div class="images">
+                <img src="${resultImage}" alt="${successType}">
+                ${isEpic ? `<img src="episch.png" alt="Episch">` : ''}
             </div>
         </div>
-        ${topic ? `<p><i>Thema: ${topic}</i></p>` : ''}
-        <p><strong>Modifier:</strong> ${modifier}</p>
-        <p><strong>Ergebnis:</strong> ${successType}${isEpic ? ' (episch)' : ''}</p>
+        ${topic ? `<p class="topic">Thema: ${topic}</p>` : ''}
+        <p class="modifier"><strong>Modifier:</strong> ${modifier}</p>
+        <p class="result"><strong>Ergebnis:</strong> ${successType}${isEpic ? ' (episch)' : ''}</p>
         <table>
             <tr>
                 <th>D6</th>
@@ -95,10 +102,15 @@ function rollDiceAndDisplayResults() {
             </tr>
         </table>
     `;
-    resultDiv.classList.add("result");
 
     const resultsContainer = document.getElementById("results");
     resultsContainer.insertBefore(resultDiv, resultsContainer.firstChild);
+
+    if (resultsContainer.children.length === 1) {
+        resultDiv.addEventListener('click', toggleResultsList);
+    }
+
+    updateArrowIndicator();
 
     saveResultToLocalStorage({
         modifier, result, d6, d10_1, d10_2, successType, isAction, resultImage, isEpic, topic
@@ -107,6 +119,24 @@ function rollDiceAndDisplayResults() {
     topicInput.value = '';
 
     animateDice(isAction, d6, d10_1, d10_2);
+}
+
+function toggleResultsList() {
+    const resultsContainer = document.getElementById("results");
+    resultsContainer.classList.toggle('expanded');
+    updateArrowIndicator();
+}
+
+function updateArrowIndicator() {
+    const resultsContainer = document.getElementById("results");
+    const firstCard = resultsContainer.firstElementChild;
+    if (firstCard) {
+        if (resultsContainer.classList.contains('expanded')) {
+            firstCard.setAttribute('title', 'Click to collapse');
+        } else {
+            firstCard.setAttribute('title', 'Click to expand');
+        }
+    }
 }
 
 function animateDice(isAction, d6, d10_1, d10_2) {
@@ -145,18 +175,18 @@ function loadResultsFromLocalStorage() {
     resultsContainer.innerHTML = "";
     results.reverse().forEach((result, index) => {
         const resultDiv = document.createElement("div");
+        resultDiv.classList.add("result-card");
         resultDiv.innerHTML = `
-            <hr>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <h4>Wurf ${results.length - index} (${result.isAction ? 'Aktion' : 'Herausforderung'})</h4>
-                <div>
-                    <img src="${result.resultImage}" alt="${result.successType}" style="width: 24px; height: 24px; vertical-align: middle;">
-                    ${result.isEpic ? `<img src="episch.png" alt="Episch" style="width: 24px; height: 24px; vertical-align: middle; margin-left: 5px;">` : ''}
+                <div class="images">
+                    <img src="${result.resultImage}" alt="${result.successType}">
+                    ${result.isEpic ? `<img src="episch.png" alt="Episch">` : ''}
                 </div>
             </div>
-            ${result.topic ? `<p><i>Thema: ${result.topic}</i></p>` : ''}
-            <p><strong>Modifier:</strong> ${result.modifier}</p>
-            <p><strong>Ergebnis:</strong> ${result.successType}</p>
+            ${result.topic ? `<p class="topic">Thema: ${result.topic}</p>` : ''}
+            <p class="modifier"><strong>Modifier:</strong> ${result.modifier}</p>
+            <p class="result"><strong>Ergebnis:</strong> ${result.successType}${result.isEpic ? ' (episch)' : ''}</p>
             <table>
                 <tr>
                     <th>D6</th>
@@ -170,9 +200,13 @@ function loadResultsFromLocalStorage() {
                 </tr>
             </table>
         `;
-        resultDiv.classList.add("result");
         resultsContainer.appendChild(resultDiv);
     });
+
+    if (resultsContainer.children.length > 0) {
+        resultsContainer.firstElementChild.addEventListener('click', toggleResultsList);
+        updateArrowIndicator();
+    }
 }
 
 // Function to clear results from localStorage
@@ -185,6 +219,7 @@ document.getElementById("clearButton").addEventListener("click", function() {
 // Toggle Dark Mode
 document.getElementById("darkModeButton").addEventListener("click", function() {
     document.body.classList.toggle("dark-mode");
+    document.querySelector(".input-card").classList.toggle("dark-mode");
     saveDarkModeToLocalStorage();
 });
 
@@ -200,6 +235,7 @@ function loadDarkModeFromLocalStorage() {
     const darkMode = localStorage.getItem("darkMode");
     if (darkMode === "true") {
         document.body.classList.add("dark-mode");
+        document.querySelector(".input-card").classList.add("dark-mode");
     }
     console.log("Dark mode loaded from localStorage:", darkMode);
 }

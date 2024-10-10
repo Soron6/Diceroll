@@ -6,6 +6,29 @@ body {
     margin: 0 auto;
 }
 
+.card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.input-card {
+    margin-bottom: 20px;
+}
+
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    max-width: 100%;
+    height: auto;
+}
+
 #inputAndButtons {
     display: flex;
     flex-wrap: wrap;
@@ -71,18 +94,6 @@ button {
     background-color: #555;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-th, td {
-    text-align: center;
-    padding: 8px;
-    border: 1px solid #ddd;
-}
-
 #diceAnimationContainer {
     display: flex;
     justify-content: center;
@@ -137,19 +148,131 @@ th, td {
     100% { transform: rotate(360deg); }
 }
 
+#results {
+    position: relative;
+    transition: max-height 0.3s ease-out;
+    overflow: hidden;
+}
+
+.result-card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.result-card:first-child {
+    position: relative;
+    z-index: 2;
+}
+
+.result-card:first-child::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.3s ease;
+}
+
+#results:not(.expanded) .result-card:first-child::after {
+    background-image: url('arrow_down.png');
+}
+
+#results.expanded .result-card:first-child::after {
+    background-image: url('arrow_up.png');
+}
+
+#results:not(.expanded) .result-card:not(:first-child) {
+    display: none;
+}
+
+#results.expanded .result-card:not(:first-child) {
+    display: block;
+}
+
+.result-card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.result-card h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.result-card table {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.result-card th, .result-card td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.result-card .topic {
+    font-style: italic;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.result-card .modifier, .result-card .result {
+    margin: 5px 0;
+}
+
+.result-card .images {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.result-card .images img {
+    width: 24px;
+    height: 24px;
+    margin-left: 5px;
+}
+
 .dark-mode {
     background-color: #121212;
     color: #ffffff;
 }
 
-.dark-mode th, .dark-mode td {
-    border-color: #555;
+.dark-mode .card, .dark-mode .result-card {
+    background-color: #2a2a2a;
+    box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+}
+
+.dark-mode .card:hover, .dark-mode .result-card:hover {
+    box-shadow: 0 4px 8px rgba(255,255,255,0.15);
 }
 
 .dark-mode input[type="number"], .dark-mode input[type="text"] {
     background-color: #333;
     color: #fff;
     border-color: #555;
+}
+
+.dark-mode .result-card h4, .dark-mode .result-card p {
+    color: #f0f0f0;
+}
+
+.dark-mode .result-card .topic {
+    color: #aaa;
+}
+
+.dark-mode .result-card th, .dark-mode .result-card td,
+.dark-mode th, .dark-mode td {
+    border-color: #444;
 }
 
 @media (max-width: 600px) {

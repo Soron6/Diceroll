@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,31 +7,33 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="inputAndButtons">
-        <div id="inputSection">
-            <button id="decrementButton">-</button>
-            <input type="number" id="variableInput" value="3" min="0">
-            <button id="incrementButton">+</button>
+    <div class="card input-card">
+        <div class="logo-container">
+            <img src="header_text.png" alt="Dice Roller Logo" class="logo">
         </div>
-        <div id="buttonSection">
-            <button id="rollButton">Roll Dice</button>
-            <button id="clearButton">Clear Content</button>
-            <button id="darkModeButton">Dark Mode</button>
+        <div id="inputAndButtons">
+            <div id="inputSection">
+                <button id="decrementButton">-</button>
+                <input type="number" id="variableInput" value="3" min="0">
+                <button id="incrementButton">+</button>
+            </div>
+            <div id="buttonSection">
+                <button id="rollButton">Roll Dice</button>
+                <button id="clearButton">Clear Content</button>
+                <button id="darkModeButton">Dark Mode</button>
+            </div>
+            <div id="toggleAndTopicSection">
+                <button id="toggleButton">Aktion</button>
+                <input type="text" id="topicInput" placeholder="Enter topic">
+            </div>
         </div>
-        <div id="toggleAndTopicSection">
-            <button id="toggleButton">Aktion</button>
-            <input type="text" id="topicInput" placeholder="Enter topic">
+        <div id="diceAnimationContainer">
+            <div id="d6Animation"><div class="resultText"></div></div>
+            <div id="d10Animation1"><div class="resultText"></div></div>
+            <div id="d10Animation2"><div class="resultText"></div></div>
         </div>
     </div>
-
-    <div id="diceAnimationContainer">
-        <div id="d6Animation"><div class="resultText"></div></div>
-        <div id="d10Animation1"><div class="resultText"></div></div>
-        <div id="d10Animation2"><div class="resultText"></div></div>
-    </div>
-
     <div id="results"></div>
-
     <script src="script.js"></script>
 </body>
 </html>
