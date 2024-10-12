@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
-	<link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="48x48" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+	<link rel="shortcut icon" type="image/x-icon" href="fav/favicon.ico">
+	<link rel="icon" type="image/png" href="fav/favicon-48x48.png" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="fav/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="fav/apple-touch-icon.png" />
+    <link rel="manifest" href="fav/site.webmanifest" />
 	
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,7 +15,7 @@
 <body>
     <div class="card input-card">
         <div class="logo-container">
-            <img src="header_text.png" alt="Dice Roller Logo" class="logo">
+            <img src="assets/header_text.png" alt="Dice Roller Logo" class="logo">
         </div>
         <div id="inputAndButtons">
             <div id="inputSection">
@@ -40,6 +40,12 @@
         </div>
     </div>
     <div id="results"></div>
+    
+    <!-- Load JavaScript files in the correct order -->
+    <script src="config.js"></script>
+    <script src="storageManager.js"></script>
+    <script src="diceRoller.js"></script>
+    <script src="uiManager.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

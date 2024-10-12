@@ -112,11 +112,11 @@ button {
 }
 
 #d6Animation {
-    background-image: url('d6.png');
+    background-image: url('assets/d6.png');
 }
 
 #d10Animation1, #d10Animation2 {
-    background-image: url('d10.png');
+    background-image: url('assets/d10.png');
 }
 
 .resultText {
@@ -184,11 +184,11 @@ button {
 }
 
 #results:not(.expanded) .result-card:first-child::after {
-    background-image: url('arrow_down.png');
+    background-image: url('assets/arrow_down.png');
 }
 
 #results.expanded .result-card:first-child::after {
-    background-image: url('arrow_up.png');
+    background-image: url('assets/arrow_up.png');
 }
 
 #results:not(.expanded) .result-card:not(:first-child) {
