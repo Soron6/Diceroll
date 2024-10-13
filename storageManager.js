@@ -1,3 +1,5 @@
+console.log('storageManager.js loaded');
+
 // Function to save an individual result to localStorage
 function saveResultToLocalStorage(resultObj) {
     let results = JSON.parse(localStorage.getItem("results")) || [];
@@ -8,40 +10,38 @@ function saveResultToLocalStorage(resultObj) {
 
 // Function to load all results from localStorage and display them
 function loadResultsFromLocalStorage() {
+    console.log("loadResultsFromLocalStorage called");
     let results = JSON.parse(localStorage.getItem("results")) || [];
+    console.log("Loaded results from localStorage:", results);
+    
     const resultsContainer = document.getElementById("results");
+    if (!resultsContainer) {
+        console.error("Results container not found");
+        return;
+    }
+    
+    console.log("Clearing results container");
     resultsContainer.innerHTML = "";
+    
+    if (results.length === 0) {
+        console.log("No results to display");
+        return;
+    }
+    
+    console.log("Populating results");
     results.reverse().forEach((result, index) => {
-        const resultDiv = document.createElement("div");
-        resultDiv.classList.add("result-card");
-        resultDiv.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <h4>Wurf ${results.length - index} (${result.isAction ? 'Aktion' : 'Herausforderung'})</h4>
-                <div class="images">
-                    <img src="${result.resultImage}" alt="${result.successType}">
-                    ${result.isEpic ? `<img src="assets/episch.png" alt="Episch">` : ''}
-                </div>
-            </div>
-            ${result.topic ? `<p class="topic">Thema: ${result.topic}</p>` : ''}
-            <p class="modifier"><strong>Modifier:</strong> ${result.modifier}</p>
-            <p class="result"><strong>Ergebnis:</strong> ${result.successType}${result.isEpic ? ' (episch)' : ''}</p>
-            <table>
-                <tr>
-                    <th>D6</th>
-                    <th>D10 (1)</th>
-                    <th>D10 (2)</th>
-                </tr>
-                <tr>
-                    <td>${result.isAction ? `<strong>${result.d6}</strong>` : '-'}</td>
-                    <td>${result.result > result.d10_1 ? `<s>${result.d10_1}</s>` : result.d10_1}</td>
-                    <td>${result.result > result.d10_2 ? `<s>${result.d10_2}</s>` : result.d10_2}</td>
-                </tr>
-            </table>
-        `;
-        resultsContainer.appendChild(resultDiv);
+        result.rollNumber = results.length - index;
+        const resultCard = createResultCard(result);
+        resultsContainer.appendChild(resultCard);
     });
+    
+    console.log("Results populated");
 
-    updateResultListeners();
+    if (typeof updateResultListeners === 'function') {
+        updateResultListeners();
+    } else {
+        console.error("updateResultListeners function not found");
+    }
 }
 
 // Function to save dark mode setting in localStorage
@@ -53,10 +53,45 @@ function saveDarkModeToLocalStorage() {
 
 // Function to load dark mode setting from localStorage
 function loadDarkModeFromLocalStorage() {
+    console.log("loadDarkModeFromLocalStorage called");
     const darkMode = localStorage.getItem("darkMode");
+    console.log("Loaded dark mode setting:", darkMode);
     if (darkMode === "true") {
         document.body.classList.add("dark-mode");
-        document.querySelector(".input-card").classList.add("dark-mode");
+        document.querySelectorAll('.card, .result-card, .input-card').forEach(el => {
+            el.classList.add("dark-mode");
+        });
+        console.log("Dark mode applied");
     }
-    console.log("Dark mode loaded from localStorage:", darkMode);
 }
+
+// Function to toggle dark mode
+function toggleDarkMode() {
+    console.log('Toggling dark mode');
+    document.body.classList.toggle("dark-mode");
+    document.querySelectorAll('.card, .result-card, .input-card').forEach(el => {
+        el.classList.toggle("dark-mode");
+    });
+    saveDarkModeToLocalStorage();
+    console.log('Dark mode toggled');
+}
+
+// Function to clear all results from localStorage
+function clearResultsFromLocalStorage() {
+    localStorage.removeItem("results");
+    const resultsContainer = document.getElementById("results");
+    if (resultsContainer) {
+        resultsContainer.innerHTML = "";
+    }
+    console.log("All results cleared from localStorage and display");
+}
+
+// Ensure these functions are globally accessible
+window.loadResultsFromLocalStorage = loadResultsFromLocalStorage;
+window.loadDarkModeFromLocalStorage = loadDarkModeFromLocalStorage;
+window.saveDarkModeToLocalStorage = saveDarkModeToLocalStorage;
+window.saveResultToLocalStorage = saveResultToLocalStorage;
+window.toggleDarkMode = toggleDarkMode;
+window.clearResultsFromLocalStorage = clearResultsFromLocalStorage;
+
+console.log('storageManager.js finished loading');

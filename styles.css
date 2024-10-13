@@ -31,30 +31,30 @@ body {
 
 #inputAndButtons {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 10px;
-    margin-bottom: 20px;
 }
 
-#inputSection, #buttonSection, #toggleAndTopicSection {
+#topRow, #middleRow, #bottomRow, #utilityRow {
+    display: flex;
+    gap: 10px;
+}
+
+#toggleButton, #variableSection, #topicInput, #rollButton, #clearButton, #darkModeButton {
+    flex: 1;
+}
+
+#variableSection {
     display: flex;
     gap: 5px;
 }
 
-#inputSection {
-    flex: 1 1 100%;
-}
-
-#buttonSection {
-    flex: 1 1 100%;
-}
-
-#toggleAndTopicSection {
-    flex: 1 1 100%;
+#decrementButton, #incrementButton, #variableInput {
+    flex: 1;
 }
 
 input[type="number"], input[type="text"] {
-    flex: 1;
+    width: 100%;
     padding: 8px;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -67,7 +67,10 @@ button {
     cursor: pointer;
     border-radius: 5px;
     color: white;
-    flex: 1;
+}
+
+.full-width {
+    width: 100%;
 }
 
 #decrementButton {
@@ -148,6 +151,7 @@ button {
     100% { transform: rotate(360deg); }
 }
 
+/* Updated Result Card Styles */
 #results {
     position: relative;
     transition: max-height 0.3s ease-out;
@@ -155,12 +159,14 @@ button {
 }
 
 .result-card {
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-bottom: 10px;
+    background-color: #333;
+    border-radius: 12px;
     padding: 15px;
-    transition: all 0.3s ease;
+    color: white;
+    font-family: Arial, sans-serif;
+    position: relative;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     cursor: pointer;
 }
 
@@ -199,49 +205,108 @@ button {
     display: block;
 }
 
-.result-card:hover {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
 .result-card h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.result-card table {
-    margin-top: 10px;
-    width: 100%;
-}
-
-.result-card th, .result-card td {
-    padding: 8px;
-    text-align: center;
-    border: 1px solid #ddd;
+    font-size: 24px;
+    margin: 0 0 10px 0;
+    font-weight: normal;
 }
 
 .result-card .topic {
-    font-style: italic;
-    color: #666;
-    margin-bottom: 10px;
+    font-size: 19.6px; /* Reduced by 30% from 28px */
+    font-weight: bold;
+    margin: 10px 0;
 }
 
-.result-card .modifier, .result-card .result {
-    margin: 5px 0;
+.result-card .result {
+    font-size: 24px;
+    margin: 10px 0;
 }
 
-.result-card .images {
+.result-card .modifier {
+    font-size: 20px;
+    margin: 10px 0;
+}
+
+.result-card .modifier-value {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.result-card .modifier-result {
+    color: white;
+    font-weight: normal;
+}
+
+.result-card .dice-results {
     display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-top: 15px;
 }
 
-.result-card .images img {
+.result-card .dice {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.result-card .dice-symbol {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+}
+
+.result-card .dice-value {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.result-card .d6 .dice-value {
+    background-color: #555;
+    color: white;
+}
+
+.result-card .d10 .dice-value {
+    color: white;
+}
+
+.result-card .d10 .dice-value.beaten {
+    background-color: #4CAF50;
+}
+
+.result-card .d10 .dice-value.not-beaten {
+    background-color: #f44336;
+}
+
+.result-card .timestamp {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 10px;
+}
+
+.result-card .icons {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: flex;
+    gap: 10px;
+}
+
+.result-card .icons img {
     width: 24px;
     height: 24px;
-    margin-left: 5px;
 }
 
+/* Dark Mode Styles */
 .dark-mode {
     background-color: #121212;
     color: #ffffff;
@@ -267,7 +332,11 @@ button {
 }
 
 .dark-mode .result-card .topic {
-    color: #aaa;
+    color: #fff;
+}
+
+.dark-mode .result-card .modifier-value {
+    color: #6EE76E; /* A brighter green for better visibility in dark mode */
 }
 
 .dark-mode .result-card th, .dark-mode .result-card td,
@@ -275,12 +344,17 @@ button {
     border-color: #444;
 }
 
+.dark-mode .result-card .timestamp {
+    color: #aaa;
+}
+
+/* Responsive Design */
 @media (max-width: 600px) {
     #inputAndButtons {
         flex-direction: column;
     }
 
-    #inputSection, #buttonSection, #toggleAndTopicSection {
+    #topRow, #middleRow, #bottomRow, #utilityRow {
         flex-wrap: wrap;
     }
 
@@ -291,5 +365,14 @@ button {
     #d6Animation, #d10Animation1, #d10Animation2 {
         width: 60px;
         height: 60px;
+    }
+
+    .result-card .result {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .result-card .timestamp {
+        margin-top: 5px;
     }
 }
