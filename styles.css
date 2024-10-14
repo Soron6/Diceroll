@@ -112,6 +112,7 @@ button {
     background-repeat: no-repeat;
     background-position: center;
     position: relative;
+    top: 0;
 }
 
 #d6Animation {
@@ -142,13 +143,41 @@ button {
     padding-top: 5px;
 }
 
-.rollingAnimation {
-    animation: rollAnimation 1s ease-out;
+@keyframes fallAndBounce {
+    0% { 
+        transform: translateY(-120%) rotate(0deg); 
+        opacity: 0;
+    }
+    12% { 
+        opacity: 1; 
+    }
+    35% { 
+        transform: translateY(5%) rotate(var(--spin-amount));
+    }
+    43% { 
+        transform: translateY(calc(var(--bounce1-height) * -1)) rotate(var(--spin-amount));
+    }
+    49% { 
+        transform: translateY(2%) rotate(var(--spin-amount));
+    }
+    54% { 
+        transform: translateY(calc(var(--bounce2-height) * -1)) rotate(var(--spin-amount));
+    }
+    58%, 100% { 
+        transform: translateY(0) rotate(var(--spin-amount));
+    }
 }
 
-@keyframes rollAnimation {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.fallingAnimation {
+    animation: fallAndBounce 1.08s cubic-bezier(0.5, 0, 0.75, 1) forwards;
+}
+
+#d6Animation.fallingAnimation, 
+#d10Animation1.fallingAnimation, 
+#d10Animation2.fallingAnimation {
+    --spin-amount: 0deg;
+    --bounce1-height: 0%;
+    --bounce2-height: 0%;
 }
 
 /* Updated Result Card Styles */
@@ -159,10 +188,10 @@ button {
 }
 
 .result-card {
-    background-color: #333;
+    background-color: #f9f9f9;
     border-radius: 12px;
     padding: 15px;
-    color: white;
+    color: #333;
     font-family: Arial, sans-serif;
     position: relative;
     margin-bottom: 10px;
@@ -209,22 +238,26 @@ button {
     font-size: 24px;
     margin: 0 0 10px 0;
     font-weight: normal;
+    color: #333;
 }
 
 .result-card .topic {
-    font-size: 19.6px; /* Reduced by 30% from 28px */
+    font-size: 19.6px;
     font-weight: bold;
     margin: 10px 0;
+    color: #333;
 }
 
 .result-card .result {
     font-size: 24px;
     margin: 10px 0;
+    color: #333;
 }
 
 .result-card .modifier {
     font-size: 20px;
     margin: 10px 0;
+    color: #333;
 }
 
 .result-card .modifier-value {
@@ -233,7 +266,7 @@ button {
 }
 
 .result-card .modifier-result {
-    color: white;
+    color: #333;
     font-weight: normal;
 }
 
@@ -257,6 +290,7 @@ button {
     justify-content: center;
     align-items: center;
     font-size: 36px;
+    color: #333;
 }
 
 .result-card .dice-value {
@@ -268,15 +302,11 @@ button {
     border-radius: 50%;
     font-weight: bold;
     font-size: 20px;
+    color: white;
 }
 
 .result-card .d6 .dice-value {
     background-color: #555;
-    color: white;
-}
-
-.result-card .d10 .dice-value {
-    color: white;
 }
 
 .result-card .d10 .dice-value.beaten {
@@ -289,7 +319,7 @@ button {
 
 .result-card .timestamp {
     font-size: 14px;
-    color: #aaa;
+    color: #777;
     margin-top: 10px;
 }
 
@@ -315,6 +345,7 @@ button {
 .dark-mode .card, .dark-mode .result-card {
     background-color: #2a2a2a;
     box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+    color: #ffffff;
 }
 
 .dark-mode .card:hover, .dark-mode .result-card:hover {
@@ -327,21 +358,17 @@ button {
     border-color: #555;
 }
 
-.dark-mode .result-card h4, .dark-mode .result-card p {
+.dark-mode .result-card h4, 
+.dark-mode .result-card .topic, 
+.dark-mode .result-card .result, 
+.dark-mode .result-card .modifier, 
+.dark-mode .result-card .modifier-result,
+.dark-mode .result-card .dice-symbol {
     color: #f0f0f0;
 }
 
-.dark-mode .result-card .topic {
-    color: #fff;
-}
-
 .dark-mode .result-card .modifier-value {
-    color: #6EE76E; /* A brighter green for better visibility in dark mode */
-}
-
-.dark-mode .result-card th, .dark-mode .result-card td,
-.dark-mode th, .dark-mode td {
-    border-color: #444;
+    color: #6EE76E;
 }
 
 .dark-mode .result-card .timestamp {

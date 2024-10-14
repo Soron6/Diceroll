@@ -5,6 +5,22 @@ if (typeof rollSound === 'undefined') {
     const rollSound = new Audio('assets/roll.mp3');
 }
 
+// Function to play overlapping sounds with random offsets
+function playOverlappingSounds() {
+    const sounds = [
+        new Audio('assets/roll.mp3'),
+        new Audio('assets/roll.mp3'),
+        new Audio('assets/roll.mp3')
+    ];
+    
+    sounds.forEach((sound, index) => {
+        const randomOffset = Math.random() * 120; // Random offset between 0 and 120ms
+        setTimeout(() => {
+            sound.play().catch(error => console.error("Error playing sound:", error));
+        }, index * 60 + randomOffset); // Base delay of 60ms per sound, plus random offset
+    });
+}
+
 // Function to get the appropriate result image
 function getResultImage(successType) {
     switch (successType) {
@@ -67,11 +83,6 @@ function createResultCard(result) {
 // Roll the dice and display results
 function rollDiceAndDisplayResults() {
     console.log("Roll Dice function called");
-    
-    // Play the roll sound
-    if (typeof rollSound !== 'undefined') {
-        rollSound.play().catch(error => console.error("Error playing sound:", error));
-    }
     
     const variableInput = document.getElementById("variableInput");
     const topicInput = document.getElementById("topicInput");
@@ -142,17 +153,42 @@ function animateDice(isAction, d6, d10_1, d10_2) {
     const d10_2Element = document.getElementById("d10Animation2");
 
     d6Element.style.visibility = isAction ? "visible" : "hidden";
-    [d6Element, d10_1Element, d10_2Element].forEach(el => {
+    const diceElements = [d6Element, d10_1Element, d10_2Element];
+
+    diceElements.forEach(el => {
         el.querySelector('.resultText').textContent = '';
-        el.classList.add("rollingAnimation");
+        el.classList.remove("fallingAnimation");
+        el.offsetHeight; // Trigger reflow
+        
+        // Random spin between 360 and 1080 degrees
+        const spinAmount = (Math.random() > 0.5 ? '' : '-') + (Math.random() * 720 + 360);
+        
+        // Random bounce heights
+        const bounce1Height = 40 + Math.random() * 20; // Between 40% and 60%
+        const bounce2Height = 20 + Math.random() * 15; // Between 20% and 35%
+        
+        el.style.setProperty('--spin-amount', `${spinAmount}deg`);
+        el.style.setProperty('--bounce1-height', `${bounce1Height}%`);
+        el.style.setProperty('--bounce2-height', `${bounce2Height}%`);
     });
 
+    // Play the overlapping roll sounds with random offsets
+    playOverlappingSounds();
+
+    // Animate dice with slight offsets
+    setTimeout(() => d10_1Element.classList.add("fallingAnimation"), 0);
+    setTimeout(() => d10_2Element.classList.add("fallingAnimation"), 60);
+    if (isAction) {
+        setTimeout(() => d6Element.classList.add("fallingAnimation"), 120);
+    }
+
+    // Set the final values after animation
     setTimeout(() => {
-        [d6Element, d10_1Element, d10_2Element].forEach(el => el.classList.remove("rollingAnimation"));
+        diceElements.forEach(el => el.classList.remove("fallingAnimation"));
         if (isAction) d6Element.querySelector('.resultText').textContent = d6;
         d10_1Element.querySelector('.resultText').textContent = d10_1;
         d10_2Element.querySelector('.resultText').textContent = d10_2;
-    }, 1000);
+    }, 1080); // Match this with the animation duration
 }
 
 // Make functions globally accessible
