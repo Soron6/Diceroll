@@ -22,12 +22,56 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Toggle button clicked. isAction:", isAction);
     });
 
-    // Function to clear results from localStorage
-    document.getElementById("clearButton").addEventListener("click", function() {
-        document.getElementById("results").innerHTML = "";
-        localStorage.removeItem("results");
-        console.log("Results cleared from localStorage");
+    // Side Panel Toggle
+    const sidePanel = document.getElementById("sidePanel");
+    const sidePanelIndicator = document.getElementById("sidePanelIndicator");
+
+    sidePanelIndicator.addEventListener("click", function(event) {
+        event.stopPropagation(); // Prevent event from bubbling up
+        toggleSidePanel();
     });
+
+    // Close side panel when clicking outside
+    document.addEventListener("click", function(event) {
+        if (!sidePanel.contains(event.target) && !sidePanelIndicator.contains(event.target) && sidePanel.classList.contains("open")) {
+            closeSidePanel();
+        }
+    });
+
+    // Prevent clicks inside the side panel from closing it
+    sidePanel.addEventListener("click", function(event) {
+        event.stopPropagation();
+    });
+
+    // Function to toggle side panel
+    function toggleSidePanel() {
+        sidePanel.classList.toggle("open");
+        sidePanelIndicator.classList.toggle("open");
+        updateSidePanelIndicator();
+    }
+
+    // Function to close side panel
+    function closeSidePanel() {
+        sidePanel.classList.remove("open");
+        sidePanelIndicator.classList.remove("open");
+        updateSidePanelIndicator();
+    }
+
+    // Function to update side panel indicator
+    function updateSidePanelIndicator() {
+        if (sidePanel.classList.contains("open")) {
+            sidePanelIndicator.innerHTML = "&#10005;"; // "×" symbol
+            sidePanelIndicator.title = "Close panel";
+            // The positioning is now handled by CSS
+        } else {
+            sidePanelIndicator.innerHTML = "&#9881;"; // "⚙" symbol
+            sidePanelIndicator.title = "Open panel";
+            // The positioning is now handled by CSS
+        }
+    }
+
+    // Initial update of side panel indicator
+    updateSidePanelIndicator();
 });
 
 function updateResultListeners() {

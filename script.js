@@ -58,6 +58,22 @@ function initializePage() {
     } else {
         console.error("Roll button not found");
     }
+
+    // Ensure clear button works
+    const clearButton = document.getElementById("clearButton");
+    if (clearButton) {
+        console.log('Adding event listener to clear button');
+        clearButton.addEventListener('click', function() {
+            console.log('Clear button clicked');
+            if (typeof clearResultsFromLocalStorage === 'function') {
+                clearResultsFromLocalStorage();
+            } else {
+                console.error("clearResultsFromLocalStorage function not found");
+            }
+        });
+    } else {
+        console.error("Clear button not found");
+    }
     
     console.log("Page initialization complete");
 }

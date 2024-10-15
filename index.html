@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dice Roller</title>
+    <title>Iron Dice Roller</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,22 +17,17 @@
                 <button id="toggleButton" class="full-width">Aktion</button>
                 <div id="variableSection">
                     <button id="decrementButton">-</button>
-                    <input type="number" id="variableInput" value="3">
+                    <input type="number" id="variableInput" value="3" min="0">
                     <button id="incrementButton">+</button>
                 </div>
             </div>
 
             <div id="middleRow">
-                <input type="text" id="topicInput" placeholder="Enter topic (optional)">
+                <input type="text" id="topicInput" placeholder="Topic (optional)">
             </div>
 
             <div id="bottomRow">
                 <button id="rollButton" class="full-width">Roll</button>
-            </div>
-
-            <div id="utilityRow">
-                <button id="clearButton">Clear</button>
-                <button id="darkModeButton">Darkmode</button>
             </div>
         </div>
     </div>
@@ -49,11 +44,23 @@
         </div>
     </div>
 
-    <div id="results"></div>
+    <div id="results">
+    </div>
+
+    <div id="sidePanel">
+        <div id="sidePanelContent">
+            <button id="clearButton" class="sidebarButton">Clear</button>
+            <button id="darkModeButton" class="sidebarButton">Darkmode</button>
+        </div>
+    </div>
+
+    <div id="sidePanelIndicator">
+        ⚙
+    </div>
 
     <script src="config.js"></script>
-    <script src="diceRoller.js"></script>
     <script src="storageManager.js"></script>
+    <script src="diceRoller.js"></script>
     <script src="uiManager.js"></script>
     <script src="script.js"></script>
 </body>

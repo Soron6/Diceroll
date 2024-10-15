@@ -35,12 +35,12 @@ body {
     gap: 10px;
 }
 
-#topRow, #middleRow, #bottomRow, #utilityRow {
+#topRow, #middleRow, #bottomRow {
     display: flex;
     gap: 10px;
 }
 
-#toggleButton, #variableSection, #topicInput, #rollButton, #clearButton, #darkModeButton {
+#toggleButton, #variableSection, #topicInput, #rollButton {
     flex: 1;
 }
 
@@ -87,14 +87,6 @@ button {
 
 #rollButton {
     background-color: #4CAF50;
-}
-
-#clearButton {
-    background-color: #f44336;
-}
-
-#darkModeButton {
-    background-color: #555;
 }
 
 #diceAnimationContainer {
@@ -375,13 +367,96 @@ button {
     color: #aaa;
 }
 
+/* Updated Side Panel Styles */
+#sidePanel {
+    position: fixed;
+    top: 0;
+    right: -25%;
+    width: 25%;
+    height: 100%;
+    background-color: #f9f9f9;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+}
+
+#sidePanel.open {
+    right: 0;
+}
+
+#sidePanelContent {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#sidePanelIndicator {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 60px;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    z-index: 1001;
+    transition: right 0.3s ease, left 0.3s ease, transform 0.3s ease;
+}
+
+#sidePanelIndicator:not(.open) {
+    right: 0;
+    border-radius: 5px 0 0 5px;
+}
+
+#sidePanelIndicator.open {
+    left: calc(75% - 30px);
+    border-radius: 0 5px 5px 0;
+    transform: translateY(-50%) scaleX(-1);
+}
+
+.sidebarButton {
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Updated button colors */
+#clearButton {
+    background-color: #ff0000;
+}
+
+#darkModeButton {
+    background-color: #444444;
+}
+
+.sidebarButton:hover {
+    opacity: 0.9;
+}
+
+/* Dark mode for side panel */
+.dark-mode #sidePanel {
+    background-color: #2a2a2a;
+}
+
+.dark-mode #sidePanelIndicator {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
 /* Responsive Design */
 @media (max-width: 600px) {
     #inputAndButtons {
         flex-direction: column;
     }
 
-    #topRow, #middleRow, #bottomRow, #utilityRow {
+    #topRow, #middleRow, #bottomRow {
         flex-wrap: wrap;
     }
 
@@ -401,5 +476,28 @@ button {
 
     .result-card .timestamp {
         margin-top: 5px;
+    }
+
+    #sidePanel {
+        width: 75%;
+        right: -75%;
+    }
+
+    #sidePanel.open {
+        right: 0;
+    }
+
+    #sidePanelIndicator {
+        width: 40px;
+        height: 40px;
+    }
+
+    #sidePanelIndicator:not(.open) {
+        border-radius: 50% 0 0 50%;
+    }
+
+    #sidePanelIndicator.open {
+        left: calc(25% - 40px);
+        border-radius: 0 50% 50% 0;
     }
 }
