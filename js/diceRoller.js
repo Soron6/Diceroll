@@ -1,10 +1,3 @@
-console.log('diceRoller.js loaded');
-
-// Only declare rollSound if it hasn't been declared before
-if (typeof rollSound === 'undefined') {
-    const rollSound = new Audio('assets/roll.mp3');
-}
-
 // Function to play overlapping sounds with random offsets
 function playOverlappingSounds() {
     const sounds = [
@@ -35,7 +28,6 @@ function getResultImage(successType) {
 function formatDateTime(dateString) {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) {
-        console.error("Invalid date:", dateString);
         return "Invalid Date";
     }
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
@@ -82,8 +74,6 @@ function createResultCard(result) {
 
 // Roll the dice and display results
 function rollDiceAndDisplayResults() {
-    console.log("Roll Dice function called");
-    
     const variableInput = document.getElementById("variableInput");
     const topicInput = document.getElementById("topicInput");
     const variable = parseInt(variableInput.value); 
@@ -142,8 +132,6 @@ function displayLatestResult(result) {
 
     if (typeof updateResultListeners === 'function') {
         updateResultListeners();
-    } else {
-        console.error("updateResultListeners function not found");
     }
 }
 
@@ -195,5 +183,3 @@ function animateDice(isAction, d6, d10_1, d10_2) {
 window.rollDiceAndDisplayResults = rollDiceAndDisplayResults;
 window.formatDateTime = formatDateTime;
 window.createResultCard = createResultCard;
-
-console.log('diceRoller.js finished loading');

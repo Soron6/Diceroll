@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("toggleButton").addEventListener("click", function() {
         isAction = !isAction;
         this.innerText = isAction ? "Aktion" : "Herausforderung";
-        console.log("Toggle button clicked. isAction:", isAction);
     });
 
     // Side Panel Toggle
@@ -62,16 +61,34 @@ document.addEventListener('DOMContentLoaded', function() {
         if (sidePanel.classList.contains("open")) {
             sidePanelIndicator.innerHTML = "&#10005;"; // "×" symbol
             sidePanelIndicator.title = "Close panel";
-            // The positioning is now handled by CSS
         } else {
             sidePanelIndicator.innerHTML = "&#9881;"; // "⚙" symbol
             sidePanelIndicator.title = "Open panel";
-            // The positioning is now handled by CSS
         }
     }
 
     // Initial update of side panel indicator
     updateSidePanelIndicator();
+
+    // Event listener for Export CSV button
+    document.getElementById("exportCsvButton").addEventListener("click", function() {
+        if (typeof exportResultsToCsv === 'function') {
+            exportResultsToCsv();
+        } else {
+            console.error("exportResultsToCsv function not found");
+        }
+    });
+
+    // Event listener for Import CSV button
+    document.getElementById("importCsvButton").addEventListener("click", function() {
+        if (typeof importResultsFromCsv === 'function') {
+            importResultsFromCsv();
+        } else {
+            console.error("importResultsFromCsv function not found");
+        }
+    });
+
+    // Remove the event listener for Clear button from here
 });
 
 function updateResultListeners() {
@@ -86,6 +103,7 @@ function updateResultListeners() {
     });
 
     updateArrowIndicator();
+    applyDarkModeToCards(); // Apply dark mode to all cards
 }
 
 function toggleResultsList() {
@@ -105,3 +123,66 @@ function updateArrowIndicator() {
         }
     }
 }
+
+function showMessage(type, message) {
+    const messageContainer = document.getElementById('messageContainer');
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${type}`;
+    messageElement.innerHTML = `
+        <span class="message-icon"></span>
+        <span class="message-text">${message}</span>
+        <span class="message-close">&times;</span>
+    `;
+    messageContainer.appendChild(messageElement);
+
+    messageElement.querySelector('.message-close').addEventListener('click', () => {
+        messageContainer.removeChild(messageElement);
+    });
+
+    setTimeout(() => {
+        messageElement.classList.add('show');
+    }, 10);
+
+    setTimeout(() => {
+        messageElement.classList.remove('show');
+        setTimeout(() => {
+            messageContainer.removeChild(messageElement);
+        }, 300);
+    }, 5000);
+}
+
+function showConfirmMessage(message, onConfirm) {
+    const messageContainer = document.getElementById('messageContainer');
+    const messageElement = document.createElement('div');
+    messageElement.className = 'message warning';
+    messageElement.innerHTML = `
+        <span class="message-icon"></span>
+        <span class="message-text">${message}</span>
+        <div class="message-buttons">
+            <button class="confirm-button">Ja</button>
+            <button class="cancel-button">Nein</button>
+        </div>
+    `;
+    messageContainer.appendChild(messageElement);
+
+    const confirmButton = messageElement.querySelector('.confirm-button');
+    const cancelButton = messageElement.querySelector('.cancel-button');
+
+    confirmButton.addEventListener('click', () => {
+        onConfirm();
+        messageContainer.removeChild(messageElement);
+    });
+
+    cancelButton.addEventListener('click', () => {
+        messageContainer.removeChild(messageElement);
+    });
+
+    setTimeout(() => {
+        messageElement.classList.add('show');
+    }, 10);
+}
+
+// Make these functions globally accessible
+window.showMessage = showMessage;
+window.showConfirmMessage = showConfirmMessage;
+window.updateResultListeners = updateResultListeners;

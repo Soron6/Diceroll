@@ -1,18 +1,13 @@
-console.log('storageManager.js loaded');
-
 // Function to save an individual result to localStorage
 function saveResultToLocalStorage(resultObj) {
     let results = JSON.parse(localStorage.getItem("results")) || [];
     results.push(resultObj);
     localStorage.setItem("results", JSON.stringify(results));
-    console.log("Results saved to localStorage:", results);
 }
 
 // Function to load all results from localStorage and display them
 function loadResultsFromLocalStorage() {
-    console.log("loadResultsFromLocalStorage called");
     let results = JSON.parse(localStorage.getItem("results")) || [];
-    console.log("Loaded results from localStorage:", results);
     
     const resultsContainer = document.getElementById("results");
     if (!resultsContainer) {
@@ -20,60 +15,60 @@ function loadResultsFromLocalStorage() {
         return;
     }
     
-    console.log("Clearing results container");
     resultsContainer.innerHTML = "";
     
     if (results.length === 0) {
-        console.log("No results to display");
         return;
     }
     
-    console.log("Populating results");
     results.reverse().forEach((result, index) => {
         result.rollNumber = results.length - index;
         const resultCard = createResultCard(result);
         resultsContainer.appendChild(resultCard);
     });
-    
-    console.log("Results populated");
 
     if (typeof updateResultListeners === 'function') {
         updateResultListeners();
     } else {
         console.error("updateResultListeners function not found");
     }
+
+    // Apply dark mode to result cards if necessary
+    applyDarkModeToCards();
 }
 
 // Function to save dark mode setting in localStorage
 function saveDarkModeToLocalStorage() {
     const isDarkMode = document.body.classList.contains("dark-mode");
     localStorage.setItem("darkMode", isDarkMode);
-    console.log("Dark mode saved to localStorage:", isDarkMode);
 }
 
 // Function to load dark mode setting from localStorage
 function loadDarkModeFromLocalStorage() {
-    console.log("loadDarkModeFromLocalStorage called");
     const darkMode = localStorage.getItem("darkMode");
-    console.log("Loaded dark mode setting:", darkMode);
     if (darkMode === "true") {
         document.body.classList.add("dark-mode");
-        document.querySelectorAll('.card, .result-card, .input-card').forEach(el => {
-            el.classList.add("dark-mode");
-        });
-        console.log("Dark mode applied");
+        applyDarkModeToCards();
     }
 }
 
 // Function to toggle dark mode
 function toggleDarkMode() {
-    console.log('Toggling dark mode');
     document.body.classList.toggle("dark-mode");
-    document.querySelectorAll('.card, .result-card, .input-card').forEach(el => {
-        el.classList.toggle("dark-mode");
-    });
+    applyDarkModeToCards();
     saveDarkModeToLocalStorage();
-    console.log('Dark mode toggled');
+}
+
+// Function to apply dark mode to all cards
+function applyDarkModeToCards() {
+    const isDarkMode = document.body.classList.contains("dark-mode");
+    document.querySelectorAll('.card, .result-card, .input-card').forEach(el => {
+        if (isDarkMode) {
+            el.classList.add("dark-mode");
+        } else {
+            el.classList.remove("dark-mode");
+        }
+    });
 }
 
 // Function to clear all results from localStorage
@@ -83,7 +78,108 @@ function clearResultsFromLocalStorage() {
     if (resultsContainer) {
         resultsContainer.innerHTML = "";
     }
-    console.log("All results cleared from localStorage and display");
+    if (typeof updateResultListeners === 'function') {
+        updateResultListeners();
+    }
+}
+
+// Function to export results to CSV
+function exportResultsToCsv() {
+    const results = JSON.parse(localStorage.getItem("results")) || [];
+    if (results.length === 0) {
+        showMessage('info', 'Keine Ergebnisse zum Exportieren vorhanden.');
+        return;
+    }
+
+    let csvContent = "data:text/csv;charset=utf-8,";
+    csvContent += "Roll Number,Action/Challenge,Topic,Success Type,Epic,D6,D10_1,D10_2,Result,Modifier,Timestamp\n";
+
+    results.forEach((result, index) => {
+        const row = [
+            results.length - index,
+            result.isAction ? "Action" : "Challenge",
+            result.topic,
+            result.successType,
+            result.isEpic,
+            result.d6,
+            result.d10_1,
+            result.d10_2,
+            result.result,
+            result.modifier,
+            result.timestamp
+        ];
+        csvContent += row.join(",") + "\n";
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "iron_dice_roller_results.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Function to import results from CSV
+function importResultsFromCsv() {
+    showConfirmMessage('Achtung:\nBestehende Daten werden überschrieben.\nMöchten Sie wirklich fortfahren?', () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.csv';
+
+        input.onchange = function(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const lines = content.split('\n');
+                const results = [];
+
+                // Skip the header row
+                for (let i = 1; i < lines.length; i++) {
+                    if (lines[i].trim() === '') continue;
+                    const values = lines[i].split(',');
+                    const result = {
+                        isAction: values[1] === "Action",
+                        topic: values[2],
+                        successType: values[3],
+                        isEpic: values[4] === "true",
+                        d6: parseInt(values[5]),
+                        d10_1: parseInt(values[6]),
+                        d10_2: parseInt(values[7]),
+                        result: parseInt(values[8]),
+                        modifier: parseInt(values[9]),
+                        timestamp: values[10],
+                        resultImage: getResultImage(values[3])
+                    };
+                    results.push(result);
+                }
+
+                // Save imported results to localStorage
+                localStorage.setItem("results", JSON.stringify(results));
+
+                // Reload and display the imported results
+                loadResultsFromLocalStorage();
+
+                showMessage('success', 'Ergebnisse erfolgreich importiert!');
+            };
+
+            reader.readAsText(file);
+        };
+
+        input.click();
+    });
+}
+
+// Helper function to get the appropriate result image
+function getResultImage(successType) {
+    switch (successType) {
+        case "Voller Erfolg": return 'assets/vollerErfolg.png';
+        case "Teilerfolg": return 'assets/Teilerforg.png';
+        case "Fehlschlag": return 'assets/Fehlschlag.png';
+        default: return '';
+    }
 }
 
 // Ensure these functions are globally accessible
@@ -93,5 +189,5 @@ window.saveDarkModeToLocalStorage = saveDarkModeToLocalStorage;
 window.saveResultToLocalStorage = saveResultToLocalStorage;
 window.toggleDarkMode = toggleDarkMode;
 window.clearResultsFromLocalStorage = clearResultsFromLocalStorage;
-
-console.log('storageManager.js finished loading');
+window.exportResultsToCsv = exportResultsToCsv;
+window.importResultsFromCsv = importResultsFromCsv;
