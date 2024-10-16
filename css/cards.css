@@ -1,0 +1,36 @@
+.card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.input-card {
+    margin-bottom: 20px;
+}
+
+#inputAndButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#topRow, #middleRow, #bottomRow {
+    display: flex;
+    gap: 10px;
+}
+
+#toggleButton, #variableSection, #topicInput, #rollButton {
+    flex: 1;
+}
+
+#variableSection {
+    display: flex;
+    gap: 5px;
+}
+
+#decrementButton, #incrementButton, #variableInput {
+    flex: 1;
+}

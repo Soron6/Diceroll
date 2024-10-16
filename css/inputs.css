@@ -1,0 +1,35 @@
+input[type="number"], input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+button {
+    padding: 8px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    color: white;
+}
+
+.full-width {
+    width: 100%;
+}
+
+#decrementButton {
+    background-color: #f44336;
+}
+
+#incrementButton {
+    background-color: #4CAF50;
+}
+
+#toggleButton {
+    background-color: #008CBA;
+}
+
+#rollButton {
+    background-color: #4CAF50;
+}

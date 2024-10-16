@@ -1,0 +1,46 @@
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.dark-mode .card, .dark-mode .result-card {
+    background-color: #2a2a2a;
+    box-shadow: 0 2px 4px rgba(255,255,255,0.1);
+    color: #ffffff;
+}
+
+.dark-mode .card:hover, .dark-mode .result-card:hover {
+    box-shadow: 0 4px 8px rgba(255,255,255,0.15);
+}
+
+.dark-mode input[type="number"], .dark-mode input[type="text"] {
+    background-color: #333;
+    color: #fff;
+    border-color: #555;
+}
+
+.dark-mode .result-card h4, 
+.dark-mode .result-card .topic, 
+.dark-mode .result-card .result, 
+.dark-mode .result-card .modifier, 
+.dark-mode .result-card .modifier-result,
+.dark-mode .result-card .dice-symbol {
+    color: #f0f0f0;
+}
+
+.dark-mode .result-card .modifier-value {
+    color: #6EE76E;
+}
+
+.dark-mode .result-card .timestamp {
+    color: #aaa;
+}
+
+.dark-mode #sidePanel {
+    background-color: #2a2a2a;
+}
+
+.dark-mode #sidePanelIndicator {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}

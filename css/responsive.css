@@ -1,0 +1,49 @@
+@media (max-width: 600px) {
+    #inputAndButtons {
+        flex-direction: column;
+    }
+
+    #topRow, #middleRow, #bottomRow {
+        flex-wrap: wrap;
+    }
+
+    #diceAnimationContainer {
+        flex-wrap: wrap;
+    }
+
+    #d6Animation, #d10Animation1, #d10Animation2 {
+        width: 60px;
+        height: 60px;
+    }
+
+    .result-card .result {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .result-card .timestamp {
+        margin-top: 5px;
+    }
+
+    #sidePanel {
+        width: 75%;
+        right: -75%;
+    }
+
+    #sidePanel.open {
+        right: 0;
+    }
+
+    #sidePanelIndicator {
+        width: 40px;
+        height: 40px;
+    }
+
+    #sidePanelIndicator:not(.open) {
+        right: 0;
+    }
+
+    #sidePanelIndicator.open {
+        right: 75%;
+    }
+}

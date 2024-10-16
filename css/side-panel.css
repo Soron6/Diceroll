@@ -1,0 +1,70 @@
+#sidePanel {
+    position: fixed;
+    top: 0;
+    right: -25%;
+    width: 25%;
+    height: 100%;
+    background-color: #f9f9f9;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+}
+
+#sidePanel.open {
+    right: 0;
+}
+
+#sidePanelContent {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#sidePanelIndicator {
+    position: fixed;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 60px;
+    background-color: #f9f9f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    z-index: 1001;
+    transition: right 0.3s ease;
+    border-radius: 5px 0 0 5px;
+    font-size: 24px;
+}
+
+#sidePanelIndicator:not(.open) {
+    right: 0;
+}
+
+#sidePanelIndicator.open {
+    right: 25%;
+}
+
+.sidebarButton {
+    padding: 10px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#clearButton {
+    background-color: #ff0000;
+}
+
+#darkModeButton {
+    background-color: #444444;
+}
+
+.sidebarButton:hover {
+    opacity: 0.9;
+}
