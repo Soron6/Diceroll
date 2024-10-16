@@ -127,3 +127,13 @@
 .dark-mode #sidePanelContent hr {
     border-top-color: #444;
 }
+
+/* Sound toggle button styles */
+#soundToggleButton {
+    background-color: #4CAF50; /* Green when sound is enabled */
+    transition: background-color 0.3s ease;
+}
+
+#soundToggleButton.sound-disabled {
+    background-color: #f44336; /* Red when sound is disabled */
+}
