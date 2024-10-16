@@ -19,3 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Clear the topic input
     document.getElementById("topicInput").value = '';
 });
+
+// Global variable for sound setting
+let soundEnabled = true;

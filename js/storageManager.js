@@ -172,6 +172,17 @@ function importResultsFromCsv() {
     });
 }
 
+// Function to save sound setting to localStorage
+function saveSoundSettingToLocalStorage(isEnabled) {
+    localStorage.setItem("soundEnabled", isEnabled);
+}
+
+// Function to load sound setting from localStorage
+function loadSoundSettingFromLocalStorage() {
+    const soundEnabled = localStorage.getItem("soundEnabled");
+    return soundEnabled === null ? true : soundEnabled === "true";
+}
+
 // Helper function to get the appropriate result image
 function getResultImage(successType) {
     switch (successType) {
@@ -191,3 +202,5 @@ window.toggleDarkMode = toggleDarkMode;
 window.clearResultsFromLocalStorage = clearResultsFromLocalStorage;
 window.exportResultsToCsv = exportResultsToCsv;
 window.importResultsFromCsv = importResultsFromCsv;
+window.saveSoundSettingToLocalStorage = saveSoundSettingToLocalStorage;
+window.loadSoundSettingFromLocalStorage = loadSoundSettingFromLocalStorage;

@@ -1,5 +1,7 @@
 // Function to play overlapping sounds with random offsets
 function playOverlappingSounds() {
+    if (!window.soundEnabled) return; // Use window.soundEnabled to ensure we're accessing the global variable
+
     const sounds = [
         new Audio('assets/roll.mp3'),
         new Audio('assets/roll.mp3'),

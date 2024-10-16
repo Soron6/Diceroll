@@ -17,6 +17,16 @@ function initializePage() {
         }
     }
 
+    // Load sound setting
+    if (typeof loadSoundSettingFromLocalStorage === 'function') {
+        try {
+            window.soundEnabled = loadSoundSettingFromLocalStorage();
+            updateSoundToggleButton();
+        } catch (error) {
+            console.error('Error in loadSoundSettingFromLocalStorage:', error);
+        }
+    }
+
     // Ensure dark mode toggle button works
     const darkModeButton = document.getElementById("darkModeButton");
     if (darkModeButton) {
@@ -59,6 +69,36 @@ function initializePage() {
         });
     } else {
         console.error("Clear button not found");
+    }
+
+    // Ensure sound toggle button works
+    const soundToggleButton = document.getElementById("soundToggleButton");
+    if (soundToggleButton) {
+        soundToggleButton.addEventListener('click', toggleSound);
+    } else {
+        console.error("Sound toggle button not found");
+    }
+}
+
+function updateSoundToggleButton() {
+    const soundToggleButton = document.getElementById("soundToggleButton");
+    if (soundToggleButton) {
+        soundToggleButton.textContent = window.soundEnabled ? "Sound: An" : "Sound: Aus";
+        if (window.soundEnabled) {
+            soundToggleButton.classList.remove('sound-disabled');
+        } else {
+            soundToggleButton.classList.add('sound-disabled');
+        }
+    }
+}
+
+function toggleSound() {
+    window.soundEnabled = !window.soundEnabled;
+    updateSoundToggleButton();
+    if (typeof saveSoundSettingToLocalStorage === 'function') {
+        saveSoundSettingToLocalStorage(window.soundEnabled);
+    } else {
+        console.error("saveSoundSettingToLocalStorage function not found");
     }
 }
 
