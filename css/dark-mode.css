@@ -1,24 +1,31 @@
+/* dark-mode.css */
+
+/* Dark mode styles for the body */
 .dark-mode {
     background-color: #121212;
     color: #ffffff;
 }
 
+/* Dark mode styles for cards */
 .dark-mode .card, .dark-mode .result-card {
     background-color: #2a2a2a;
     box-shadow: 0 2px 4px rgba(255,255,255,0.1);
     color: #ffffff;
 }
 
+/* Hover effect for cards in dark mode */
 .dark-mode .card:hover, .dark-mode .result-card:hover {
     box-shadow: 0 4px 8px rgba(255,255,255,0.15);
 }
 
+/* Dark mode styles for input fields */
 .dark-mode input[type="number"], .dark-mode input[type="text"] {
     background-color: #333;
     color: #fff;
     border-color: #555;
 }
 
+/* Dark mode styles for various text elements in result cards */
 .dark-mode .result-card h4, 
 .dark-mode .result-card .topic, 
 .dark-mode .result-card .result, 
@@ -28,18 +35,22 @@
     color: #f0f0f0;
 }
 
+/* Dark mode styles for modifier value */
 .dark-mode .result-card .modifier-value {
     color: #6EE76E;
 }
 
+/* Dark mode styles for timestamp */
 .dark-mode .result-card .timestamp {
     color: #aaa;
 }
 
+/* Dark mode styles for side panel */
 .dark-mode #sidePanel {
     background-color: #2a2a2a;
 }
 
+/* Dark mode styles for side panel indicator */
 .dark-mode #sidePanelIndicator {
     background-color: #2a2a2a;
     color: #ffffff;

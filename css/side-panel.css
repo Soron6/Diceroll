@@ -1,3 +1,6 @@
+/* side-panel.css */
+
+/* Side panel container styles */
 #sidePanel {
     position: fixed;
     top: 0;
@@ -10,10 +13,12 @@
     box-shadow: -2px 0 5px rgba(0,0,0,0.1);
 }
 
+/* Open state for side panel */
 #sidePanel.open {
     right: 0;
 }
 
+/* Content within side panel */
 #sidePanelContent {
     padding: 20px;
     display: flex;
@@ -21,6 +26,23 @@
     gap: 10px;
 }
 
+/* Title styles */
+#sidePanelContent h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+/* Divider styles */
+#sidePanelContent hr {
+    width: 100%;
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 15px 0;
+}
+
+/* Side panel indicator styles */
 #sidePanelIndicator {
     position: fixed;
     top: 50%;
@@ -40,14 +62,17 @@
     font-size: 24px;
 }
 
+/* Closed state for side panel indicator */
 #sidePanelIndicator:not(.open) {
     right: 0;
 }
 
+/* Open state for side panel indicator */
 #sidePanelIndicator.open {
     right: 25%;
 }
 
+/* Common styles for sidebar buttons */
 .sidebarButton {
     padding: 10px;
     color: white;
@@ -57,14 +82,48 @@
     transition: background-color 0.3s;
 }
 
-#clearButton {
-    background-color: #ff0000;
-}
-
+/* Dark mode button specific styles */
 #darkModeButton {
     background-color: #444444;
 }
 
+/* Export CSV button specific styles */
+#exportCsvButton {
+    background-color: #4CAF50;
+}
+
+/* Import CSV button specific styles */
+#importCsvButton {
+    background-color: #008CBA;
+}
+
+/* Clear button specific styles */
+#clearButton {
+    background-color: #ff0000;
+}
+
+/* Hover effect for sidebar buttons */
 .sidebarButton:hover {
     opacity: 0.9;
+}
+
+/* Dark mode styles for side panel */
+.dark-mode #sidePanel {
+    background-color: #2a2a2a;
+}
+
+/* Dark mode styles for side panel indicator */
+.dark-mode #sidePanelIndicator {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+/* Dark mode styles for title */
+.dark-mode #sidePanelContent h2 {
+    color: #ffffff;
+}
+
+/* Dark mode styles for divider */
+.dark-mode #sidePanelContent hr {
+    border-top-color: #444;
 }

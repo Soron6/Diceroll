@@ -1,3 +1,6 @@
+/* inputs.css */
+
+/* Styles for number and text inputs */
 input[type="number"], input[type="text"] {
     width: 100%;
     padding: 8px;
@@ -6,6 +9,7 @@ input[type="number"], input[type="text"] {
     text-align: center;
 }
 
+/* General button styles */
 button {
     padding: 8px 10px;
     border: none;
@@ -14,22 +18,24 @@ button {
     color: white;
 }
 
+/* Full width utility class */
 .full-width {
     width: 100%;
 }
 
+/* Specific button colors */
 #decrementButton {
-    background-color: #f44336;
+    background-color: #f44336; /* Red */
 }
 
 #incrementButton {
-    background-color: #4CAF50;
+    background-color: #4CAF50; /* Green */
 }
 
 #toggleButton {
-    background-color: #008CBA;
+    background-color: #008CBA; /* Blue */
 }
 
 #rollButton {
-    background-color: #4CAF50;
+    background-color: #4CAF50; /* Green */
 }

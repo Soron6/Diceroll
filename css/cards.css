@@ -1,3 +1,6 @@
+/* cards.css */
+
+/* General card styles */
 .card {
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -7,30 +10,36 @@
     transition: all 0.3s ease;
 }
 
+/* Input card specific styles */
 .input-card {
     margin-bottom: 20px;
 }
 
+/* Layout for input and buttons */
 #inputAndButtons {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
+/* Row layouts */
 #topRow, #middleRow, #bottomRow {
     display: flex;
     gap: 10px;
 }
 
+/* Equal width for specific elements */
 #toggleButton, #variableSection, #topicInput, #rollButton {
     flex: 1;
 }
 
+/* Variable section layout */
 #variableSection {
     display: flex;
     gap: 5px;
 }
 
+/* Equal width for variable controls */
 #decrementButton, #incrementButton, #variableInput {
     flex: 1;
 }

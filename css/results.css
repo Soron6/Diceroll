@@ -1,9 +1,13 @@
+/* results.css */
+
+/* Results container styles */
 #results {
     position: relative;
     transition: max-height 0.3s ease-out;
     overflow: hidden;
 }
 
+/* Result card styles */
 .result-card {
     background-color: #f9f9f9;
     border-radius: 12px;
@@ -16,11 +20,13 @@
     cursor: pointer;
 }
 
+/* Styles for the first result card */
 .result-card:first-child {
     position: relative;
     z-index: 2;
 }
 
+/* Arrow indicator for expandable/collapsible functionality */
 .result-card:first-child::after {
     content: '';
     position: absolute;
@@ -35,22 +41,27 @@
     transition: transform 0.3s ease;
 }
 
+/* Arrow down for collapsed state */
 #results:not(.expanded) .result-card:first-child::after {
     background-image: url('../assets/arrow_down.png');
 }
 
+/* Arrow up for expanded state */
 #results.expanded .result-card:first-child::after {
     background-image: url('../assets/arrow_up.png');
 }
 
+/* Hide other cards when collapsed */
 #results:not(.expanded) .result-card:not(:first-child) {
     display: none;
 }
 
+/* Show other cards when expanded */
 #results.expanded .result-card:not(:first-child) {
     display: block;
 }
 
+/* Result card title styles */
 .result-card h4 {
     font-size: 24px;
     margin: 0 0 10px 0;
@@ -58,6 +69,7 @@
     color: #333;
 }
 
+/* Result card topic styles */
 .result-card .topic {
     font-size: 19.6px;
     font-weight: bold;
@@ -65,28 +77,33 @@
     color: #333;
 }
 
+/* Result card result styles */
 .result-card .result {
     font-size: 24px;
     margin: 10px 0;
     color: #333;
 }
 
+/* Result card modifier styles */
 .result-card .modifier {
     font-size: 20px;
     margin: 10px 0;
     color: #333;
 }
 
+/* Modifier value styles */
 .result-card .modifier-value {
     color: #4CAF50;
     font-weight: bold;
 }
 
+/* Modifier result styles */
 .result-card .modifier-result {
     color: #333;
     font-weight: normal;
 }
 
+/* Dice results layout */
 .result-card .dice-results {
     display: flex;
     justify-content: flex-start;
@@ -94,12 +111,14 @@
     margin-top: 15px;
 }
 
+/* Individual dice layout */
 .result-card .dice {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
+/* Dice symbol styles */
 .result-card .dice-symbol {
     width: 40px;
     height: 40px;
@@ -110,6 +129,7 @@
     color: #333;
 }
 
+/* Dice value styles */
 .result-card .dice-value {
     width: 40px;
     height: 40px;
@@ -122,24 +142,29 @@
     color: white;
 }
 
+/* D6 dice value styles */
 .result-card .d6 .dice-value {
     background-color: #555;
 }
 
+/* D10 dice value styles for beaten result */
 .result-card .d10 .dice-value.beaten {
     background-color: #4CAF50;
 }
 
+/* D10 dice value styles for not beaten result */
 .result-card .d10 .dice-value.not-beaten {
     background-color: #f44336;
 }
 
+/* Timestamp styles */
 .result-card .timestamp {
     font-size: 14px;
     color: #777;
     margin-top: 10px;
 }
 
+/* Icons container styles */
 .result-card .icons {
     position: absolute;
     top: 15px;
@@ -148,6 +173,7 @@
     gap: 10px;
 }
 
+/* Individual icon styles */
 .result-card .icons img {
     width: 24px;
     height: 24px;

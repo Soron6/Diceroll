@@ -1,48 +1,62 @@
+/* responsive.css */
+
+/* Styles for screens with a maximum width of 600px */
 @media (max-width: 600px) {
+    /* Stack input and buttons vertically */
     #inputAndButtons {
         flex-direction: column;
     }
 
+    /* Allow wrapping for top, middle, and bottom rows */
     #topRow, #middleRow, #bottomRow {
         flex-wrap: wrap;
     }
 
+    /* Allow wrapping for dice animation container */
     #diceAnimationContainer {
         flex-wrap: wrap;
     }
 
+    /* Reduce size of dice animations for smaller screens */
     #d6Animation, #d10Animation1, #d10Animation2 {
         width: 60px;
         height: 60px;
     }
 
+    /* Stack result elements vertically */
     .result-card .result {
         flex-direction: column;
         align-items: flex-start;
     }
 
+    /* Add space above timestamp in result cards */
     .result-card .timestamp {
         margin-top: 5px;
     }
 
+    /* Adjust side panel width for smaller screens */
     #sidePanel {
         width: 75%;
         right: -75%;
     }
 
+    /* Adjust open state of side panel */
     #sidePanel.open {
         right: 0;
     }
 
+    /* Increase size of side panel indicator for touch targets */
     #sidePanelIndicator {
         width: 40px;
         height: 40px;
     }
 
+    /* Adjust position of closed side panel indicator */
     #sidePanelIndicator:not(.open) {
         right: 0;
     }
 
+    /* Adjust position of open side panel indicator */
     #sidePanelIndicator.open {
         right: 75%;
     }
