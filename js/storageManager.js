@@ -83,11 +83,45 @@ function clearResultsFromLocalStorage() {
     }
 }
 
+// Function to check if the app has the necessary permissions
+function checkAppPermissions() {
+    return new Promise((resolve, reject) => {
+        if (navigator.userAgent.indexOf('median') > -1) {
+            // Check if the app has the necessary permissions
+            // This is a placeholder and should be replaced with actual permission checking logic
+            // For now, we'll assume the permissions are not set
+            resolve(false);
+        } else {
+            resolve(true); // Always resolve true for non-Median environments
+        }
+    });
+}
+
+// Function to open app settings
+function openAppSettings() {
+    if (navigator.userAgent.indexOf('median') > -1) {
+        median.open.appSettings();
+    } else {
+        console.log("Not in Median environment. Can't open app settings.");
+    }
+}
+
 // Function to export results to CSV
-function exportResultsToCsv() {
+async function exportResultsToCsv() {
     const results = JSON.parse(localStorage.getItem("results")) || [];
     if (results.length === 0) {
         showMessage('info', 'Keine Ergebnisse zum Exportieren vorhanden.');
+        return;
+    }
+
+    const hasPermissions = await checkAppPermissions();
+    if (!hasPermissions) {
+        showConfirmMessage(
+            'Die App benötigt die Berechtigung zum Speichern von Dateien. Möchten Sie die App-Einstellungen öffnen, um dies zu aktivieren?',
+            () => {
+                openAppSettings();
+            }
+        );
         return;
     }
 
@@ -219,3 +253,4 @@ window.exportResultsToCsv = exportResultsToCsv;
 window.importResultsFromCsv = importResultsFromCsv;
 window.saveSoundSettingToLocalStorage = saveSoundSettingToLocalStorage;
 window.loadSoundSettingFromLocalStorage = loadSoundSettingFromLocalStorage;
+window.openAppSettings = openAppSettings;

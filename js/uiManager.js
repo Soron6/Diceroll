@@ -88,7 +88,31 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Remove the event listener for Clear button from here
+    // Add event listener for App Settings button
+    const appSettingsButton = document.createElement('button');
+    appSettingsButton.id = 'appSettingsButton';
+    appSettingsButton.className = 'sidebarButton';
+    appSettingsButton.textContent = 'App-Einstellungen';
+    appSettingsButton.addEventListener('click', function() {
+        if (typeof openAppSettings === 'function') {
+            openAppSettings();
+        } else {
+            console.error("openAppSettings function not found");
+        }
+    });
+
+    // Add the App Settings button to the side panel
+    const sidePanelContent = document.getElementById('sidePanelContent');
+    if (sidePanelContent) {
+        sidePanelContent.appendChild(appSettingsButton);
+    } else {
+        console.error("Side panel content element not found");
+    }
+
+    // Only show the App Settings button in the Median environment
+    if (navigator.userAgent.indexOf('median') === -1) {
+        appSettingsButton.style.display = 'none';
+    }
 });
 
 function updateResultListeners() {
