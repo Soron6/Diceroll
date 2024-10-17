@@ -117,13 +117,12 @@ function exportResultsToCsv() {
         const url = URL.createObjectURL(blob);
 
         // Use Median JavaScript Bridge to download the file
-        median.share.downloadFile({
-            url: url,
-            open: false // Set to false to save directly to Downloads without opening
-        });
+        const filename = 'iron_dice_roller_results.csv';
+        const downloadUrl = `median://download/url?url=${encodeURIComponent(url)}&filename=${encodeURIComponent(filename)}`;
+        window.location.href = downloadUrl;
 
         // Show a message to inform the user that the file has been downloaded
-        showMessage('success', 'Die CSV-Datei wurde in Ihren Download-Ordner heruntergeladen.');
+        showMessage('success', 'Die CSV-Datei wird in Ihren Download-Ordner heruntergeladen.');
     } else {
         // Fallback for non-Median environments (e.g., web browsers)
         const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
