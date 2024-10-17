@@ -30,7 +30,7 @@
             </div>
 
             <div id="middleRow">
-                <input type="text" id="topicInput" placeholder="Topic (optional)">
+                <input type="text" id="topicInput" placeholder="Thema (optional)" class="full-width">
             </div>
 
             <div id="bottomRow">
@@ -51,7 +51,9 @@
         </div>
     </div>
 
-    <div id="results"></div>
+    <div id="results">
+        <!-- Results will be dynamically added here -->
+    </div>
 
     <div id="sidePanel">
         <div id="sidePanelContent">
@@ -62,12 +64,17 @@
             <button id="exportCsvButton" class="sidebarButton">Export CSV</button>
             <button id="importCsvButton" class="sidebarButton">Import CSV</button>
             <button id="clearButton" class="sidebarButton">Clear</button>
+            <!-- The App Settings button will be added here dynamically -->
         </div>
     </div>
 
-    <div id="sidePanelIndicator">⚙</div>
+    <div id="sidePanelIndicator">
+        ⚙
+    </div>
 
-    <div id="messageContainer"></div>
+    <div id="messageContainer">
+        <!-- Messages will be dynamically added here -->
+    </div>
 
     <script src="js/config.js"></script>
     <script src="js/storageManager.js"></script>
