@@ -91,8 +91,7 @@ function exportResultsToCsv() {
         return;
     }
 
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Roll Number,Action/Challenge,Topic,Success Type,Epic,D6,D10_1,D10_2,Result,Modifier,Timestamp\n";
+    let csvContent = "Roll Number,Action/Challenge,Topic,Success Type,Epic,D6,D10_1,D10_2,Result,Modifier,Timestamp\n";
 
     results.forEach((result, index) => {
         const row = [
@@ -111,13 +110,27 @@ function exportResultsToCsv() {
         csvContent += row.join(",") + "\n";
     });
 
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "iron_dice_roller_results.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Check if running in Median environment
+    if (navigator.userAgent.indexOf('median') > -1) {
+        // Generate a Blob with the CSV content
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+
+        // Use Median JavaScript Bridge to download the file
+        median.share.downloadFile({
+            url: url,
+            open: false // Set to true if you want to open the file after download
+        });
+    } else {
+        // Fallback for non-Median environments (e.g., web browsers)
+        const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "iron_dice_roller_results.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 }
 
 // Function to import results from CSV
