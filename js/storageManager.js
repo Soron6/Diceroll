@@ -117,10 +117,7 @@ function exportResultsToCsv() {
         const url = URL.createObjectURL(blob);
 
         // Use Median JavaScript Bridge to download the file
-        median.share.downloadFile({
-            url: url,
-            open: false // Set to false to save directly to Downloads without opening
-        });
+        window.location.href = 'median://download/url?url=' + encodeURIComponent(url) + '&filename=iron_dice_roller_results.csv';
 
         // Show a message to inform the user that the file has been downloaded
         showMessage('success', 'Die CSV-Datei wurde in Ihren Download-Ordner heruntergeladen.');
