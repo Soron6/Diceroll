@@ -139,7 +139,7 @@ function exportResultsToCsv() {
             const downloadUrl = uploadUrl.replace('/api/v1/', '/dl/');
             
             // Show message with download link
-            showDownloadMessage('info', 'CSV-Datei erfolgreich erstellt. Klicken Sie hier zum Herunterladen.', downloadUrl, filename);
+            showDownloadMessage('info', 'CSV-Datei erfolgreich erstellt. Klicken Sie auf der nächsten Seite lange auf Download und dann auf Herunterladen.', downloadUrl, filename);
         })
         .catch(error => {
             console.error('Error uploading file:', error);
