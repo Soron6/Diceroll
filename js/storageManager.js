@@ -134,19 +134,13 @@ function exportResultsToCsv() {
             return response.json();
         })
         .then(data => {
-            const uploadUrl = data.data.url;
             // Generate the direct download URL
-            const downloadUrl = uploadUrl.replace('/api/v1/', '/dl/');
+            const downloadUrl = data.data.url.replace('https://tmpfiles.org/', 'https://tmpfiles.org/dl/');
             
             // Trigger the download
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            window.open(downloadUrl, '_blank');
 
-            showMessage('success', 'CSV-Datei erfolgreich exportiert und heruntergeladen.');
+            showMessage('success', 'CSV-Datei erfolgreich exportiert und wird heruntergeladen.');
         })
         .catch(error => {
             console.error('Error uploading file:', error);
