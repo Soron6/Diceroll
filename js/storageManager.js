@@ -141,15 +141,18 @@ function exportResultsToCsv() {
             // Generate the direct download URL
             const downloadUrl = uploadUrl.replace('/api/v1/', '/dl/');
             
-            // Trigger the download
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // Add a 2-second delay before opening the download link
+            setTimeout(() => {
+                // Trigger the download
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
 
-            showMessage('success', 'CSV-Datei erfolgreich exportiert und heruntergeladen.');
+                showMessage('success', 'CSV-Datei erfolgreich exportiert und heruntergeladen.');
+            }, 2000);
         })
         .catch(error => {
             console.error('Error uploading file:', error);
