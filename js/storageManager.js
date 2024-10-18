@@ -189,7 +189,7 @@ function importResultsFromCsv() {
                 // Skip the header row
                 for (let i = 1; i < lines.length; i++) {
                     if (lines[i].trim() === '') continue;
-                    const values = lines[i].split(',');
+                    const values = lines[i].split(',').map(value => value.replace(/^"|"$/g, ''));
                     const result = {
                         isAction: values[1] === "Action",
                         topic: values[2],
