@@ -140,14 +140,18 @@ function exportResultsToCsv() {
                     background-color: #4CAF50;
                     border: none;
                     color: white;
-                    padding: 10px 20px;
+                    padding: 8px 16px;
                     text-align: center;
                     text-decoration: none;
                     display: inline-block;
-                    font-size: 16px;
+                    font-size: 14px;
                     margin: 4px 2px;
                     cursor: pointer;
-                    border-radius: 5px;
+                    border-radius: 4px;
+                    height: 32px;
+                    line-height: 1;
+                    font-weight: bold;
+                    text-transform: uppercase;
                 ">
                     Download CSV
                 </button>
