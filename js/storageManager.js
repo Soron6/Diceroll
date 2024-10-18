@@ -113,15 +113,15 @@ function exportResultsToCsv() {
     // Generate a unique filename
     const filename = `IronDiceRoller_${Date.now()}.csv`;
 
+    // Create a Blob with the CSV content
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    // Create a FormData object
+    const formData = new FormData();
+    formData.append('file', blob, filename);
+
     // Check if running in Median environment
     if (navigator.userAgent.indexOf('median') > -1) {
-        // Create a Blob with the CSV content
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
-        // Create a FormData object
-        const formData = new FormData();
-        formData.append('file', blob, filename);
-
         // Use fetch to upload the file to tmpfiles.org
         fetch('https://tmpfiles.org/api/v1/upload', {
             method: 'POST',
@@ -137,13 +137,8 @@ function exportResultsToCsv() {
             // Generate the direct download URL
             const downloadUrl = data.data.url.replace('https://tmpfiles.org/', 'https://tmpfiles.org/dl/');
             
-            // Create a temporary link element
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // Trigger the download
+            window.open(downloadUrl, '_blank');
 
             showMessage('success', 'CSV-Datei erfolgreich exportiert und wird heruntergeladen.');
         })
@@ -153,7 +148,6 @@ function exportResultsToCsv() {
         });
     } else {
         // Fallback for non-Median environments (e.g., web browsers)
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.setAttribute("href", url);
