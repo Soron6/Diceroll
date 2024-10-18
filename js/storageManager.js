@@ -135,7 +135,24 @@ function exportResultsToCsv() {
         })
         .then(data => {
             const downloadUrl = data.data.url;
-            showMessage('success', `CSV-Datei erfolgreich hochgeladen. <a href="${downloadUrl}" target="_blank">Hier klicken zum Herunterladen</a>`);
+            const buttonHtml = `
+                <button onclick="window.open('${downloadUrl}', '_blank')" style="
+                    background-color: #4CAF50;
+                    border: none;
+                    color: white;
+                    padding: 10px 20px;
+                    text-align: center;
+                    text-decoration: none;
+                    display: inline-block;
+                    font-size: 16px;
+                    margin: 4px 2px;
+                    cursor: pointer;
+                    border-radius: 5px;
+                ">
+                    Download CSV
+                </button>
+            `;
+            showMessage('success', `CSV-Datei erfolgreich hochgeladen. ${buttonHtml}`);
         })
         .catch(error => {
             console.error('Error uploading file:', error);
