@@ -110,30 +110,42 @@ function exportResultsToCsv() {
         csvContent += row.map(item => `"${item}"`).join(",") + "\n";
     });
 
+    // Generate a unique filename
+    const filename = `IronDiceRoller_${Date.now()}.csv`;
+
+    // Create a Blob with the CSV content
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
     // Check if running in Median environment
     if (navigator.userAgent.indexOf('median') > -1) {
-        // Generate a data URL for the CSV content
-        const dataUrl = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
-        
-        // Use Median JavaScript Bridge to share the data URL
-        median.share.shareFiles([
-            {
-                url: dataUrl,
-                name: 'iron_dice_roller_results.csv',
-                mimeType: 'text/csv'
+        // Use fetch to upload the file to filebin.net
+        fetch(`https://filebin.net/IronDiceRoller/${filename}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/csv'
+            },
+            body: blob
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-        ]).then(() => {
-            showMessage('success', 'CSV-Datei wurde erfolgreich geteilt. Sie können sie nun speichern oder öffnen.');
-        }).catch(error => {
-            console.error('Error sharing file:', error);
-            showMessage('error', 'Fehler beim Teilen der Datei. Bitte versuchen Sie es später erneut.');
+            return response.json();
+        })
+        .then(data => {
+            const downloadUrl = `https://filebin.net/IronDiceRoller/${filename}`;
+            showMessage('success', `CSV-Datei erfolgreich hochgeladen. <a href="${downloadUrl}" target="_blank">Hier klicken zum Herunterladen</a>`);
+        })
+        .catch(error => {
+            console.error('Error uploading file:', error);
+            showMessage('error', 'Fehler beim Hochladen der Datei. Bitte versuchen Sie es später erneut.');
         });
     } else {
         // Fallback for non-Median environments (e.g., web browsers)
-        const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
+        const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "iron_dice_roller_results.csv");
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
