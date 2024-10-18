@@ -182,6 +182,39 @@ function showConfirmMessage(message, onConfirm) {
     }, 10);
 }
 
+// Updated function to show download message with link and close after click
+function showDownloadMessage(type, message, downloadUrl, filename) {
+    const messageContainer = document.getElementById('messageContainer');
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${type}`;
+    messageElement.innerHTML = `
+        <span class="message-icon"></span>
+        <span class="message-text">${message}</span>
+        <a href="${downloadUrl}" download="${filename}" class="download-link">Download</a>
+        <span class="message-close">&times;</span>
+    `;
+    messageContainer.appendChild(messageElement);
+
+    const closeMessage = () => {
+        messageElement.classList.remove('show');
+        setTimeout(() => {
+            messageContainer.removeChild(messageElement);
+        }, 300);
+    };
+
+    messageElement.querySelector('.message-close').addEventListener('click', closeMessage);
+
+    messageElement.querySelector('.download-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.open(downloadUrl, '_blank');
+        closeMessage();
+    });
+
+    setTimeout(() => {
+        messageElement.classList.add('show');
+    }, 10);
+}
+
 // Add styles for the new download link
 const styles = `
     .message {
@@ -319,3 +352,4 @@ document.head.appendChild(styleElement);
 window.showMessage = showMessage;
 window.showConfirmMessage = showConfirmMessage;
 window.updateResultListeners = updateResultListeners;
+window.showDownloadMessage = showDownloadMessage;
