@@ -83,16 +83,6 @@ function clearResultsFromLocalStorage() {
     }
 }
 
-// Function to force download
-function forceDownload(url, filename) {
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
 // Function to export results to CSV
 function exportResultsToCsv() {
     const results = JSON.parse(localStorage.getItem("results")) || [];
@@ -147,8 +137,13 @@ function exportResultsToCsv() {
             // Generate the direct download URL
             const downloadUrl = data.data.url.replace('https://tmpfiles.org/', 'https://tmpfiles.org/dl/');
             
-            // Force download
-            forceDownload(downloadUrl, filename);
+            // Create a temporary link element
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
 
             showMessage('success', 'CSV-Datei erfolgreich exportiert und wird heruntergeladen.');
         })
@@ -160,7 +155,12 @@ function exportResultsToCsv() {
         // Fallback for non-Median environments (e.g., web browsers)
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
-        forceDownload(url, filename);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 }
 
