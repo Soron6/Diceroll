@@ -183,4 +183,68 @@ function importResultsFromCsv() {
                 // Skip the header row
                 for (let i = 1; i < lines.length; i++) {
                     if (lines[i].trim() === '') continue;
-                    const values = lines[i].split(',').
+                    const values = lines[i].split(',').map(value => value.replace(/^"|"$/g, ''));
+                    const result = {
+                        isAction: values[1] === "Action",
+                        topic: values[2],
+                        successType: values[3],
+                        isEpic: values[4] === "true",
+                        d6: parseInt(values[5]),
+                        d10_1: parseInt(values[6]),
+                        d10_2: parseInt(values[7]),
+                        result: parseInt(values[8]),
+                        modifier: parseInt(values[9]),
+                        timestamp: values[10],
+                        resultImage: getResultImage(values[3])
+                    };
+                    results.push(result);
+                }
+
+                // Save imported results to localStorage
+                localStorage.setItem("results", JSON.stringify(results));
+
+                // Reload and display the imported results
+                loadResultsFromLocalStorage();
+
+                showMessage('success', 'Ergebnisse erfolgreich importiert!');
+            };
+
+            reader.readAsText(file);
+        };
+
+        input.click();
+    });
+}
+
+// Function to save sound setting to localStorage
+function saveSoundSettingToLocalStorage(isEnabled) {
+    localStorage.setItem("soundEnabled", isEnabled);
+}
+
+// Function to load sound setting from localStorage
+function loadSoundSettingFromLocalStorage() {
+    const soundEnabled = localStorage.getItem("soundEnabled");
+    return soundEnabled === null ? true : soundEnabled === "true";
+}
+
+// Helper function to get the appropriate result image
+function getResultImage(successType) {
+    switch (successType) {
+        case "Voller Erfolg": return 'assets/vollerErfolg.png';
+        case "Teilerfolg": return 'assets/Teilerforg.png';
+        case "Fehlschlag": return 'assets/Fehlschlag.png';
+        default: return '';
+    }
+}
+
+// Ensure these functions are globally accessible
+window.loadResultsFromLocalStorage = loadResultsFromLocalStorage;
+window.loadDarkModeFromLocalStorage = loadDarkModeFromLocalStorage;
+window.saveDarkModeToLocalStorage = saveDarkModeToLocalStorage;
+window.saveResultToLocalStorage = saveResultToLocalStorage;
+window.toggleDarkMode = toggleDarkMode;
+window.clearResultsFromLocalStorage = clearResultsFromLocalStorage;
+window.exportResultsToCsv = exportResultsToCsv;
+window.importResultsFromCsv = importResultsFromCsv;
+window.saveSoundSettingToLocalStorage = saveSoundSettingToLocalStorage;
+window.loadSoundSettingFromLocalStorage = loadSoundSettingFromLocalStorage;
