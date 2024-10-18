@@ -134,33 +134,23 @@ function exportResultsToCsv() {
             return response.json();
         })
         .then(data => {
-            const downloadUrl = data.data.url;
-            const buttonHtml = `
-                <button onclick="window.open('${downloadUrl}', '_blank')" style="
-                    background-color: #4CAF50;
-                    border: none;
-                    color: white;
-                    padding: 8px 16px;
-                    text-align: center;
-                    text-decoration: none;
-                    display: inline-block;
-                    font-size: 14px;
-                    margin: 4px 2px;
-                    cursor: pointer;
-                    border-radius: 4px;
-                    height: 32px;
-                    line-height: 1;
-                    font-weight: bold;
-                    text-transform: uppercase;
-                ">
-                    Download CSV
-                </button>
-            `;
-            showMessage('success', `CSV-Datei erfolgreich hochgeladen. ${buttonHtml}`);
+            const uploadUrl = data.data.url;
+            // Generate the direct download URL
+            const downloadUrl = uploadUrl.replace('/api/v1/', '/dl/');
+            
+            // Trigger the download
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showMessage('success', 'CSV-Datei erfolgreich exportiert und heruntergeladen.');
         })
         .catch(error => {
             console.error('Error uploading file:', error);
-            showMessage('error', 'Fehler beim Hochladen der Datei. Bitte versuchen Sie es später erneut.');
+            showMessage('error', 'Fehler beim Exportieren der Datei. Bitte versuchen Sie es später erneut.');
         });
     } else {
         // Fallback for non-Median environments (e.g., web browsers)
