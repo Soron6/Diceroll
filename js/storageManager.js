@@ -122,6 +122,9 @@ function exportResultsToCsv() {
 
     // Check if running in Median environment
     if (navigator.userAgent.indexOf('median') > -1) {
+        // Show toast message with download instructions
+        showMessage('info', '1: Lange auf Download drücken.\n2: Herunterladen auswählen');
+
         // Use fetch to upload the file to tmpfiles.org
         fetch('https://tmpfiles.org/api/v1/upload', {
             method: 'POST',
