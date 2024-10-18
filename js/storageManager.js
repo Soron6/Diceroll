@@ -112,15 +112,29 @@ function exportResultsToCsv() {
 
     // Check if running in Median environment
     if (navigator.userAgent.indexOf('median') > -1) {
-        // Generate a Blob with the CSV content
+        // Generate a unique filename
+        const filename = `IronDiceRoller_${Date.now()}.csv`;
+
+        // Create a Blob with the CSV content
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
 
-        // Use Median JavaScript Bridge to download the file
-        window.location.href = 'median://download/url?url=' + encodeURIComponent(url) + '&filename=iron_dice_roller_results.csv';
-
-        // Show a message to inform the user that the file has been downloaded
-        showMessage('success', 'Die CSV-Datei wurde in Ihren Download-Ordner heruntergeladen.');
+        // Use fetch to upload the file to filebin.net
+        fetch(`https://filebin.net/IronDiceRoller/${filename}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/octet-stream'
+            },
+            body: blob
+        })
+        .then(response => response.json())
+        .then(data => {
+            const downloadUrl = `https://filebin.net/IronDiceRoller/${filename}`;
+            showMessage('success', `CSV-Datei erfolgreich hochgeladen. Klicken Sie <a href="${downloadUrl}" target="_blank">hier</a>, um sie herunterzuladen.`);
+        })
+        .catch(error => {
+            console.error('Error uploading file:', error);
+            showMessage('error', 'Fehler beim Hochladen der Datei. Bitte versuchen Sie es später erneut.');
+        });
     } else {
         // Fallback for non-Median environments (e.g., web browsers)
         const encodedUri = encodeURI("data:text/csv;charset=utf-8," + csvContent);
