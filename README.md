@@ -41,6 +41,8 @@ Der Iron Dice Roller vereinfacht diesen Prozess, indem er die Würfe und Berechn
 - Seitenleiste für Einstellungen und zusätzliche Funktionen
 - Responsives Design für verschiedene Bildschirmgrößen
 - Lokaler Speicher für dauerhafte Ergebnisse und Einstellungen
+- Export und Import von Ergebnissen als CSV-Datei
+- Soundeffekte können ein- und ausgeschaltet werden
 
 ## Funktionsweise
 
@@ -48,9 +50,10 @@ Der Iron Dice Roller vereinfacht diesen Prozess, indem er die Würfe und Berechn
 2. Stellen Sie Ihren Modifikator ein (repräsentiert die Werte und Boni Ihres Charakters).
 3. (Optional) Geben Sie ein Thema für den Wurf ein.
 4. Klicken Sie auf den "Würfeln" Button, um den Würfelwurf durchzuführen.
-5. Die App animiert den Würfelwurf mit Soundeffekten.
+5. Die App animiert den Würfelwurf mit Soundeffekten (falls aktiviert).
 6. Die Ergebnisse werden angezeigt und zeigen den Erfolgstyp, die Würfelwerte und eventuelle epische Ergebnisse.
 7. Der Wurf wird in Ihrer Historie gespeichert, die nach Bedarf erweitert oder zusammengeklappt werden kann.
+8. Sie können Ihre Ergebnisse als CSV-Datei exportieren oder importieren.
 
 ## Ordnerstruktur
 
@@ -102,7 +105,7 @@ iron-dice-roller/
   - `dark-mode.css`: Spezifische Stile für den Dunkelmodus
 - `js/`: Enthält alle JavaScript-Dateien für die App-Funktionalität:
   - `config.js`: Anfängliche Konfigurationseinstellungen
-  - `storageManager.js`: Handhabt lokale Speicheroperationen
+  - `storageManager.js`: Handhabt lokale Speicheroperationen, CSV-Export und -Import
   - `diceRoller.js`: Verwaltet Würfellogik und Animationen
   - `uiManager.js`: Handhabt UI-Interaktionen und Updates
   - `script.js`: Haupt-Skriptdatei, die die App initialisiert
@@ -114,6 +117,7 @@ iron-dice-roller/
 2. Öffnen Sie die `index.html` Datei in einem modernen Webbrowser.
 3. Die App sollte sofort geladen und einsatzbereit sein.
 4. Passen Sie den Modifikator an, wählen Sie den Aktions- oder Herausforderungsmodus und beginnen Sie zu würfeln!
+5. Nutzen Sie die Seitenleiste für zusätzliche Funktionen wie Dunkelmodus, Sound-Einstellungen und CSV-Export/Import.
 
 Hinweis: Diese App verwendet den lokalen Speicher, um Ihre Wurf-Historie und Einstellungen zu speichern. Löschen Sie Ihre Browserdaten, wenn Sie alles auf die Standardeinstellungen zurücksetzen möchten.
 
