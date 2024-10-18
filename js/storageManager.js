@@ -157,7 +157,7 @@ function exportResultsToCsv() {
     }
 }
 
-// New function to show download message with link
+// Updated function to show download message with link and close after click
 function showDownloadMessage(type, message, downloadUrl, filename) {
     const messageContainer = document.getElementById('messageContainer');
     const messageElement = document.createElement('div');
@@ -170,13 +170,19 @@ function showDownloadMessage(type, message, downloadUrl, filename) {
     `;
     messageContainer.appendChild(messageElement);
 
-    messageElement.querySelector('.message-close').addEventListener('click', () => {
-        messageContainer.removeChild(messageElement);
-    });
+    const closeMessage = () => {
+        messageElement.classList.remove('show');
+        setTimeout(() => {
+            messageContainer.removeChild(messageElement);
+        }, 300);
+    };
+
+    messageElement.querySelector('.message-close').addEventListener('click', closeMessage);
 
     messageElement.querySelector('.download-link').addEventListener('click', (e) => {
         e.preventDefault();
         window.open(downloadUrl, '_blank');
+        closeMessage();
     });
 
     setTimeout(() => {
