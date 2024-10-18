@@ -116,15 +116,16 @@ function exportResultsToCsv() {
     // Create a Blob with the CSV content
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
 
+    // Create a FormData object
+    const formData = new FormData();
+    formData.append('file', blob, filename);
+
     // Check if running in Median environment
     if (navigator.userAgent.indexOf('median') > -1) {
-        // Use fetch to upload the file to filebin.net
-        fetch(`https://filebin.net/IronDiceRoller/${filename}`, {
+        // Use fetch to upload the file to tmpfiles.org
+        fetch('https://tmpfiles.org/api/v1/upload', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'text/csv'
-            },
-            body: blob
+            body: formData
         })
         .then(response => {
             if (!response.ok) {
@@ -133,7 +134,7 @@ function exportResultsToCsv() {
             return response.json();
         })
         .then(data => {
-            const downloadUrl = `https://filebin.net/IronDiceRoller/${filename}`;
+            const downloadUrl = data.data.url;
             showMessage('success', `CSV-Datei erfolgreich hochgeladen. <a href="${downloadUrl}" target="_blank">Hier klicken zum Herunterladen</a>`);
         })
         .catch(error => {
