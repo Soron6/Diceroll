@@ -182,6 +182,139 @@ function showConfirmMessage(message, onConfirm) {
     }, 10);
 }
 
+// Add styles for the new download link
+const styles = `
+    .message {
+        display: flex;
+        align-items: center;
+        padding: 10px 15px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+        transform: translateX(100%);
+        transition: opacity 0.3s, transform 0.3s;
+        max-width: 300px;
+    }
+
+    .message.show {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .message.info {
+        background-color: #e3f2fd;
+        color: #0d47a1;
+    }
+
+    .message.warning {
+        background-color: #fff3e0;
+        color: #e65100;
+    }
+
+    .message.error {
+        background-color: #ffebee;
+        color: #b71c1c;
+    }
+
+    .message.success {
+        background-color: #e8f5e9;
+        color: #1b5e20;
+    }
+
+    .message-icon {
+        margin-right: 10px;
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .message-text {
+        flex-grow: 1;
+    }
+
+    .message-close {
+        cursor: pointer;
+        margin-left: 10px;
+        font-size: 18px;
+    }
+
+    .message-buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    .message-buttons button {
+        margin-left: 10px;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .confirm-button {
+        background-color: #4caf50;
+        color: white;
+    }
+
+    .cancel-button {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .download-link {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 5px 10px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 3px;
+    }
+
+    .download-link:hover {
+        background-color: #45a049;
+    }
+
+    /* Dark mode styles for messages */
+    .dark-mode .message.info {
+        background-color: #0d47a1;
+        color: #e3f2fd;
+    }
+
+    .dark-mode .message.warning {
+        background-color: #e65100;
+        color: #fff3e0;
+    }
+
+    .dark-mode .message.error {
+        background-color: #b71c1c;
+        color: #ffebee;
+    }
+
+    .dark-mode .message.success {
+        background-color: #1b5e20;
+        color: #e8f5e9;
+    }
+
+    .dark-mode .download-link {
+        background-color: #45a049;
+    }
+
+    .dark-mode .download-link:hover {
+        background-color: #3d8b40;
+    }
+`;
+
+// Add styles to the document
+const styleElement = document.createElement('style');
+styleElement.textContent = styles;
+document.head.appendChild(styleElement);
+
 // Make these functions globally accessible
 window.showMessage = showMessage;
 window.showConfirmMessage = showConfirmMessage;

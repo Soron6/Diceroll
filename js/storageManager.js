@@ -122,9 +122,6 @@ function exportResultsToCsv() {
 
     // Check if running in Median environment
     if (navigator.userAgent.indexOf('median') > -1) {
-        // Show toast message with download instructions
-        showMessage('info', '1: Lange auf Download drücken.\n2: Herunterladen auswählen');
-
         // Use fetch to upload the file to tmpfiles.org
         fetch('https://tmpfiles.org/api/v1/upload', {
             method: 'POST',
@@ -141,18 +138,8 @@ function exportResultsToCsv() {
             // Generate the direct download URL
             const downloadUrl = uploadUrl.replace('/api/v1/', '/dl/');
             
-            // Add a 2-second delay before opening the download link
-            setTimeout(() => {
-                // Trigger the download
-                const link = document.createElement('a');
-                link.href = downloadUrl;
-                link.download = filename;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-
-                showMessage('success', 'CSV-Datei erfolgreich exportiert und heruntergeladen.');
-            }, 2000);
+            // Show message with download link
+            showDownloadMessage('info', 'CSV-Datei erfolgreich erstellt. Klicken Sie hier zum Herunterladen.', downloadUrl, filename);
         })
         .catch(error => {
             console.error('Error uploading file:', error);
@@ -168,6 +155,33 @@ function exportResultsToCsv() {
         link.click();
         document.body.removeChild(link);
     }
+}
+
+// New function to show download message with link
+function showDownloadMessage(type, message, downloadUrl, filename) {
+    const messageContainer = document.getElementById('messageContainer');
+    const messageElement = document.createElement('div');
+    messageElement.className = `message ${type}`;
+    messageElement.innerHTML = `
+        <span class="message-icon"></span>
+        <span class="message-text">${message}</span>
+        <a href="${downloadUrl}" download="${filename}" class="download-link">Download</a>
+        <span class="message-close">&times;</span>
+    `;
+    messageContainer.appendChild(messageElement);
+
+    messageElement.querySelector('.message-close').addEventListener('click', () => {
+        messageContainer.removeChild(messageElement);
+    });
+
+    messageElement.querySelector('.download-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        window.open(downloadUrl, '_blank');
+    });
+
+    setTimeout(() => {
+        messageElement.classList.add('show');
+    }, 10);
 }
 
 // Function to import results from CSV
@@ -254,3 +268,4 @@ window.exportResultsToCsv = exportResultsToCsv;
 window.importResultsFromCsv = importResultsFromCsv;
 window.saveSoundSettingToLocalStorage = saveSoundSettingToLocalStorage;
 window.loadSoundSettingFromLocalStorage = loadSoundSettingFromLocalStorage;
+window.showDownloadMessage = showDownloadMessage;
