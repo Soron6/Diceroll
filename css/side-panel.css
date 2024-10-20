@@ -45,7 +45,7 @@
 /* Side panel indicator styles */
 #sidePanelIndicator {
     position: fixed;
-    top: 50%;
+    top: 15%;
     right: 0;
     transform: translateY(-50%);
     width: 30px;
