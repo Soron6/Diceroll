@@ -157,39 +157,6 @@ function exportResultsToCsv() {
     }
 }
 
-// Updated function to show download message with link and close after click
-function showDownloadMessage(type, message, downloadUrl, filename) {
-    const messageContainer = document.getElementById('messageContainer');
-    const messageElement = document.createElement('div');
-    messageElement.className = `message ${type}`;
-    messageElement.innerHTML = `
-        <span class="message-icon"></span>
-        <span class="message-text">${message}</span>
-        <a href="${downloadUrl}" download="${filename}" class="download-link">Download</a>
-        <span class="message-close">&times;</span>
-    `;
-    messageContainer.appendChild(messageElement);
-
-    const closeMessage = () => {
-        messageElement.classList.remove('show');
-        setTimeout(() => {
-            messageContainer.removeChild(messageElement);
-        }, 300);
-    };
-
-    messageElement.querySelector('.message-close').addEventListener('click', closeMessage);
-
-    messageElement.querySelector('.download-link').addEventListener('click', (e) => {
-        e.preventDefault();
-        window.open(downloadUrl, '_blank');
-        closeMessage();
-    });
-
-    setTimeout(() => {
-        messageElement.classList.add('show');
-    }, 10);
-}
-
 // Function to import results from CSV
 function importResultsFromCsv() {
     showConfirmMessage('Achtung:\nBestehende Daten werden überschrieben.\nMöchten Sie wirklich fortfahren?', () => {
@@ -245,12 +212,19 @@ function importResultsFromCsv() {
 // Function to save sound setting to localStorage
 function saveSoundSettingToLocalStorage(isEnabled) {
     localStorage.setItem("soundEnabled", isEnabled);
+    if (typeof updateSoundEnabled === 'function') {
+        updateSoundEnabled(isEnabled);
+    }
 }
 
 // Function to load sound setting from localStorage
 function loadSoundSettingFromLocalStorage() {
     const soundEnabled = localStorage.getItem("soundEnabled");
-    return soundEnabled === null ? true : soundEnabled === "true";
+    const isEnabled = soundEnabled === null ? true : soundEnabled === "true";
+    if (typeof updateSoundEnabled === 'function') {
+        updateSoundEnabled(isEnabled);
+    }
+    return isEnabled;
 }
 
 // Helper function to get the appropriate result image
@@ -261,6 +235,40 @@ function getResultImage(successType) {
         case "Fehlschlag": return 'assets/Fehlschlag.png';
         default: return '';
     }
+}
+
+// New function to get statistics from stored results
+function getStatistics() {
+    const results = JSON.parse(localStorage.getItem("results")) || [];
+    const statistics = {
+        vollerErfolg: 0,
+        vollerErfolgEpic: 0,
+        teilerfolg: 0,
+        fehlschlag: 0,
+        fehlschlagEpic: 0
+    };
+
+    results.forEach(result => {
+        switch (result.successType) {
+            case "Voller Erfolg":
+                statistics.vollerErfolg++;
+                if (result.isEpic) {
+                    statistics.vollerErfolgEpic++;
+                }
+                break;
+            case "Teilerfolg":
+                statistics.teilerfolg++;
+                break;
+            case "Fehlschlag":
+                statistics.fehlschlag++;
+                if (result.isEpic) {
+                    statistics.fehlschlagEpic++;
+                }
+                break;
+        }
+    });
+
+    return statistics;
 }
 
 // Ensure these functions are globally accessible
@@ -275,3 +283,4 @@ window.importResultsFromCsv = importResultsFromCsv;
 window.saveSoundSettingToLocalStorage = saveSoundSettingToLocalStorage;
 window.loadSoundSettingFromLocalStorage = loadSoundSettingFromLocalStorage;
 window.showDownloadMessage = showDownloadMessage;
+window.getStatistics = getStatistics;

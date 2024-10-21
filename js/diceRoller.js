@@ -1,9 +1,9 @@
 // Function to play overlapping sounds with random offsets
-function playOverlappingSounds() {
+function playOverlappingSounds(result) {
     if (!window.soundEnabled) return; // Use window.soundEnabled to ensure we're accessing the global variable
 
     const sounds = [
-        new Audio('assets/roll.mp3'),
+        rollSound,
         new Audio('assets/roll.mp3'),
         new Audio('assets/roll.mp3')
     ];
@@ -14,6 +14,35 @@ function playOverlappingSounds() {
             sound.play().catch(error => console.error("Error playing sound:", error));
         }, index * 60 + randomOffset); // Base delay of 60ms per sound, plus random offset
     });
+
+    // Play the result sound after a delay
+    setTimeout(() => {
+        let resultSound;
+        switch (result.successType) {
+            case "Voller Erfolg":
+                resultSound = vollerErfolgSound;
+                break;
+            case "Teilerfolg":
+                resultSound = teilerfolgSound;
+                break;
+            case "Fehlschlag":
+                resultSound = fehlschlagSound;
+                break;
+        }
+        if (resultSound) {
+            resultSound.addEventListener('ended', () => {
+                // Play epic sound if the roll is epic, but only after the result sound has finished
+                if (result.isEpic) {
+                    epischSound.play().catch(error => console.error("Error playing epic sound:", error));
+                }
+            }, { once: true }); // Use { once: true } to ensure the event listener is removed after it's triggered
+
+            resultSound.play().catch(error => console.error("Error playing result sound:", error));
+        } else if (result.isEpic) {
+            // If there's no result sound but the roll is epic, play the epic sound immediately
+            epischSound.play().catch(error => console.error("Error playing epic sound:", error));
+        }
+    }, 1000); // Delay result sound by 1 second after roll sounds
 }
 
 // Function to get the appropriate result image
@@ -124,6 +153,7 @@ function rollDiceAndDisplayResults() {
     topicInput.value = '';
 
     animateDice(isAction, d6, d10_1, d10_2);
+    playOverlappingSounds(resultObj);
 }
 
 function displayLatestResult(result) {
@@ -161,9 +191,6 @@ function animateDice(isAction, d6, d10_1, d10_2) {
         el.style.setProperty('--bounce1-height', `${bounce1Height}%`);
         el.style.setProperty('--bounce2-height', `${bounce2Height}%`);
     });
-
-    // Play the overlapping roll sounds with random offsets
-    playOverlappingSounds();
 
     // Animate dice with slight offsets
     setTimeout(() => d10_1Element.classList.add("fallingAnimation"), 0);

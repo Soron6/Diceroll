@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Function to increment the variable
     document.getElementById("incrementButton").addEventListener("click", function() {
         const variableInput = document.getElementById("variableInput");
         let variable = parseInt(variableInput.value); 
@@ -7,7 +6,6 @@ document.addEventListener('DOMContentLoaded', function() {
         variableInput.value = variable + 1;
     });
 
-    // Function to decrement the variable
     document.getElementById("decrementButton").addEventListener("click", function() {
         const variableInput = document.getElementById("variableInput");
         let variable = parseInt(variableInput.value); 
@@ -15,62 +13,29 @@ document.addEventListener('DOMContentLoaded', function() {
         if (variable > 0) variableInput.value = variable - 1;
     });
 
-    // Toggle between "Action" and "Challenge"
     document.getElementById("toggleButton").addEventListener("click", function() {
         isAction = !isAction;
         this.innerText = isAction ? "Aktion" : "Herausforderung";
     });
 
-    // Side Panel Toggle
     const sidePanel = document.getElementById("sidePanel");
     const sidePanelIndicator = document.getElementById("sidePanelIndicator");
 
     sidePanelIndicator.addEventListener("click", function(event) {
-        event.stopPropagation(); // Prevent event from bubbling up
+        event.stopPropagation();
         toggleSidePanel();
     });
 
-    // Close side panel when clicking outside
     document.addEventListener("click", function(event) {
         if (!sidePanel.contains(event.target) && !sidePanelIndicator.contains(event.target) && sidePanel.classList.contains("open")) {
             closeSidePanel();
         }
     });
 
-    // Prevent clicks inside the side panel from closing it
     sidePanel.addEventListener("click", function(event) {
         event.stopPropagation();
     });
 
-    // Function to toggle side panel
-    function toggleSidePanel() {
-        sidePanel.classList.toggle("open");
-        sidePanelIndicator.classList.toggle("open");
-        updateSidePanelIndicator();
-    }
-
-    // Function to close side panel
-    function closeSidePanel() {
-        sidePanel.classList.remove("open");
-        sidePanelIndicator.classList.remove("open");
-        updateSidePanelIndicator();
-    }
-
-    // Function to update side panel indicator
-    function updateSidePanelIndicator() {
-        if (sidePanel.classList.contains("open")) {
-            sidePanelIndicator.innerHTML = "&#10005;"; // "×" symbol
-            sidePanelIndicator.title = "Close panel";
-        } else {
-            sidePanelIndicator.innerHTML = "&#9881;"; // "⚙" symbol
-            sidePanelIndicator.title = "Open panel";
-        }
-    }
-
-    // Initial update of side panel indicator
-    updateSidePanelIndicator();
-
-    // Event listener for Export CSV button
     document.getElementById("exportCsvButton").addEventListener("click", function() {
         if (typeof exportResultsToCsv === 'function') {
             exportResultsToCsv();
@@ -79,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Event listener for Import CSV button
     document.getElementById("importCsvButton").addEventListener("click", function() {
         if (typeof importResultsFromCsv === 'function') {
             importResultsFromCsv();
@@ -88,8 +52,37 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Remove the event listener for Clear button from here
+    document.getElementById("statisticsButton").addEventListener("click", function() {
+        showStatisticsPopup();
+    });
 });
+
+function toggleSidePanel() {
+    const sidePanel = document.getElementById("sidePanel");
+    const sidePanelIndicator = document.getElementById("sidePanelIndicator");
+    sidePanel.classList.toggle("open");
+    sidePanelIndicator.classList.toggle("open");
+    updateSidePanelIndicator();
+}
+
+function closeSidePanel() {
+    const sidePanel = document.getElementById("sidePanel");
+    const sidePanelIndicator = document.getElementById("sidePanelIndicator");
+    sidePanel.classList.remove("open");
+    sidePanelIndicator.classList.remove("open");
+    updateSidePanelIndicator();
+}
+
+function updateSidePanelIndicator() {
+    const sidePanelIndicator = document.getElementById("sidePanelIndicator");
+    if (document.getElementById("sidePanel").classList.contains("open")) {
+        sidePanelIndicator.innerHTML = "&#10005;";
+        sidePanelIndicator.title = "Close panel";
+    } else {
+        sidePanelIndicator.innerHTML = "&#9881;";
+        sidePanelIndicator.title = "Open panel";
+    }
+}
 
 function updateResultListeners() {
     const resultsContainer = document.getElementById("results");
@@ -103,7 +96,7 @@ function updateResultListeners() {
     });
 
     updateArrowIndicator();
-    applyDarkModeToCards(); // Apply dark mode to all cards
+    applyDarkModeToCards();
 }
 
 function toggleResultsList() {
@@ -182,7 +175,6 @@ function showConfirmMessage(message, onConfirm) {
     }, 10);
 }
 
-// Updated function to show download message with link and close after click
 function showDownloadMessage(type, message, downloadUrl, filename) {
     const messageContainer = document.getElementById('messageContainer');
     const messageElement = document.createElement('div');
@@ -215,7 +207,52 @@ function showDownloadMessage(type, message, downloadUrl, filename) {
     }, 10);
 }
 
-// Add styles for the new download link
+function showStatisticsPopup() {
+    closeSidePanel();
+
+    const statisticsData = getStatistics();
+    const total = statisticsData.vollerErfolg + statisticsData.teilerfolg + statisticsData.fehlschlag;
+
+    const popup = document.createElement('div');
+    popup.id = 'statisticsPopup';
+    popup.innerHTML = `
+        <h3>Statistiken</h3>
+        <div id="statisticsContent">
+            <p>Voller Erfolg: ${statisticsData.vollerErfolg} (${((statisticsData.vollerErfolg / total) * 100).toFixed(2)}%)</p>
+            <p class="indent">episch: ${statisticsData.vollerErfolgEpic}</p>
+            <p>Teilerfolg: ${statisticsData.teilerfolg} (${((statisticsData.teilerfolg / total) * 100).toFixed(2)}%)</p>
+            <p>Fehlschlag: ${statisticsData.fehlschlag} (${((statisticsData.fehlschlag / total) * 100).toFixed(2)}%)</p>
+            <p class="indent">episch: ${statisticsData.fehlschlagEpic}</p>
+        </div>
+        <div id="pieChartContainer">
+            <canvas id="statisticsPieChart"></canvas>
+        </div>
+        <button id="closeStatisticsButton">OK</button>
+    `;
+
+    document.body.appendChild(popup);
+
+    const ctx = document.getElementById('statisticsPieChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Voller Erfolg', 'Teilerfolg', 'Fehlschlag'],
+            datasets: [{
+                data: [statisticsData.vollerErfolg, statisticsData.teilerfolg, statisticsData.fehlschlag],
+                backgroundColor: ['#4CAF50', '#FFC107', '#F44336']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    document.getElementById('closeStatisticsButton').addEventListener('click', () => {
+        document.body.removeChild(popup);
+    });
+}
+
 const styles = `
     .message {
         display: flex;
@@ -313,7 +350,6 @@ const styles = `
         background-color: #45a049;
     }
 
-    /* Dark mode styles for messages */
     .dark-mode .message.info {
         background-color: #0d47a1;
         color: #e3f2fd;
@@ -343,13 +379,13 @@ const styles = `
     }
 `;
 
-// Add styles to the document
 const styleElement = document.createElement('style');
 styleElement.textContent = styles;
 document.head.appendChild(styleElement);
 
-// Make these functions globally accessible
 window.showMessage = showMessage;
 window.showConfirmMessage = showConfirmMessage;
 window.updateResultListeners = updateResultListeners;
 window.showDownloadMessage = showDownloadMessage;
+window.showStatisticsPopup = showStatisticsPopup;
+window.closeSidePanel = closeSidePanel;
